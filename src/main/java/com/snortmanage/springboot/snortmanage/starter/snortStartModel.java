@@ -71,7 +71,7 @@ public class snortStartModel {
         }
         return alert;
     }
-
+//hello
     public String idsHandle(boolean webwrite) throws IOException, InterruptedException {
 
         System.out.println("Staring SNORT IN IDS MODE");
