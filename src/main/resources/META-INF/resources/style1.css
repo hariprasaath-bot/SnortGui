@@ -1,0 +1,58 @@
+*{
+    padding: 0;
+    margin:0; 
+    text-decoration:none;
+    list-style:none; 
+    box-sizing: border-box;
+}
+body{
+     font-family: Georgia, 'Times New Roman', Times, serif;
+}
+nav{
+    background: rgb(50, 46, 46);
+    height: 80px;
+    width:100%;
+}
+.zoom {
+    transition: transform .2s;
+    /* Animation */
+    margin: 0 auto;
+}
+
+.zoom:hover {
+    transform: scale(1.1);
+    color: black;
+    /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+label.logo{
+    color:hwb(44 2% 2%);
+    font-size:35px;
+    line-height: 80px;
+    padding:0 100px;
+    font-weight:bold;
+}
+nav ul{
+    float:right;
+    margin-right:20px;
+}
+nav ul li{
+    display:inline-block;
+    line-height:  80px;
+    margin:0 5px;
+ }
+nav ul li a{
+    color:hwb(44 2% 2%);
+    font-size:17px;
+    text-transform: uppercase ;
+}
+form label{
+    color: black;
+    width:200px;
+    display: inline-block;
+}
+.alert{
+     margin-top: 50px;
+     font-family: Georgia, 'Times New Roman', Times, serif;
+     color: red;
+     font-size: 25px;
+}
