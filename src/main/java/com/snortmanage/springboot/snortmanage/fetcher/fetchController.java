@@ -1,5 +1,6 @@
 package com.snortmanage.springboot.snortmanage.fetcher;
 
+import java.io.IOException;
 import java.util.regex.*;
 import java.util.List;
 
@@ -76,8 +77,10 @@ public class fetchController {
         return "view.jsp";
     }
     @PostMapping("/validate")
-    public String ruleValidate(){
-
+    public String ruleValidate(ModelMap model) throws IOException, InterruptedException {
+        FetchRuleModel obj = new FetchRuleModel();
+        String validator = obj.ruleValidation();
+        model.put("acknowledge", validator);
         return "view.jsp";
     }
 

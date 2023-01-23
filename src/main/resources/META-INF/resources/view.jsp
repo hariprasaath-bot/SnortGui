@@ -9,7 +9,7 @@
     <body>
     <div >
        <nav>
-        <a href="home"><img class='zoom' src="Snortlogo.jpg" align="left" width=150 height=80></img></a>
+        <a href="home"><img class='zoom' src="snortlogo.jpg" align="left" width=150 height=80></img></a>
         <label class="logo">SNORT RULE MANAGE</label>
         <ul>
             <li><a href="rulegen">Generate snort rule</a></li>
@@ -30,6 +30,7 @@
             <form action="validate" method="POST">
                 <input type="submit" value="Snort rule validation">
             </form>
+            <p style="font-size: 20px" align='center' class='alert'> ${acknowledge} </p>
        </div>
     </body>
 </html>

@@ -83,7 +83,7 @@ public class snortStartModel {
         while ((line = in.readLine()) != null) {
 
             if (webwrite) {
-                pr.waitFor();
+                //pr.waitFor();
                 System.out.println("ok!");
                 in.close();
                 return line;
@@ -91,7 +91,7 @@ public class snortStartModel {
                 System.out.println(line);
             }
         }
-        pr.waitFor();
+        //pr.waitFor();
         System.out.println("ok!");
         in.close();
         return line;
@@ -107,7 +107,7 @@ public class snortStartModel {
         while ((line = in.readLine()) != null) {
             System.out.println(line);
         }
-        pr.waitFor();
+        //pr.waitFor();
         System.out.println("ok!");
 
         in.close();

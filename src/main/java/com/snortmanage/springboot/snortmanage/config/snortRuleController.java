@@ -18,7 +18,7 @@ public class snortRuleController {
     @Autowired
     private SnortRuleRepo repo;
     @GetMapping(value={"home",""})
-    public  String snortForm(ModelMap model){
+    public  String snortForm(){
         return "home.jsp";
     }
 
