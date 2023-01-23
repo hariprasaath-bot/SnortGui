@@ -32,6 +32,9 @@
             </form>
             <p style="font-size: 20px" align='center' class='alert'> ${acknowledge} </p>
        </div>
+       <form action="saveToFile">
+   			<input type="submit" value="Save to File">
+		</form>
     </body>
 </html>
 
