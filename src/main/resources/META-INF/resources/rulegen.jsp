@@ -3,7 +3,7 @@
     <head>
         <meta charset = "utf-8">
         <title> Rule generator </title>
-        <meta name="viewport" conten="width=device-width,initial-scale=1.0">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <link rel="stylesheet" href = "style1.css">
     </head>
     <body>
@@ -11,6 +11,7 @@
         <a href="home"><img class='zoom' src="snortlogo.jpg" align="left" width=150 height=80></img></a>
         <label class="logo">SNORT RULE GENERATOR</label>
         <ul>
+        	<li><p>${regname}</p></li>
             <li><a href="rulegen">Generate snort rule</a></li>
             <li><a href='rulefetch'>View snort rule</a></li>
             <li><a href='snortstart'>starting snort</a></li>

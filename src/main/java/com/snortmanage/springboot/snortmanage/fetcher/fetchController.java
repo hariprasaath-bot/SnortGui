@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snortmanage.springboot.snortmanage.config.SnortRuleConfig;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,11 +28,11 @@ public class fetchController {
     SnortRuleRepo repo;
 
     @GetMapping("/rulefetch")
-    public String fetch() {
+    public String fetch(ModelMap model,HttpSession session,HttpServletRequest request) {
         System.out.println("accepted from fetch");
-
+        String uname=(String)request.getSession().getAttribute("viewer");
+        model.put("regname", "Welcome"+" "+uname+" "+"!");
         return "view.jsp";
-
     }
 
     public static boolean isNumeric(String strNum) {

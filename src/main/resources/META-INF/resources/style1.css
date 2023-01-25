@@ -45,6 +45,11 @@ nav ul li a{
     font-size:17px;
     text-transform: uppercase ;
 }
+nav ul li p{
+    color:hwb(44 2% 2%);
+    font-size:17px;
+    text-transform: uppercase ;
+}
 form label{
     color: black;
     width:200px;

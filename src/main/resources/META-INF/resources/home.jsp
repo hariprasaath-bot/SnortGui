@@ -11,11 +11,17 @@
         <a href="home"><img class='zoom' src="snortlogo.jpg" align="left" width=150 height=80></img></a>
         <label class="logo">SNORT Homepage</label>
         <ul>
+            <li><p>${regname}</p></li>
             <li><a href="rulegen">Generate snort rule</a></li>
             <li><a href='/rulefetch'>View snort rule</a></li>
             <li><a href='/snortstart'>starting snort</a></li>
         </ul>
-       </nav> 
+       </nav>
+       <form action="namepost" method="POST"; style="width: 400px; padding: 10px;margin-left: 150px";> 
+       	<label for="name">Enter your name: </label>
+        <input type="text" name="name" id="name"><br><br>
+       	<input type="submit" value="submit">
+       </form>
     </body>
 </html>
 

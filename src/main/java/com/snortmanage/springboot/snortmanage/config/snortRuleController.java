@@ -2,11 +2,16 @@ package com.snortmanage.springboot.snortmanage.config;
 
 import com.snortmanage.springboot.snortmanage.config.SnortRuleConfig;
 import com.snortmanage.springboot.snortmanage.fetcher.SnortRuleRepo;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 
@@ -23,7 +28,9 @@ public class snortRuleController {
     }
 
     @GetMapping(value={"rulegen"})
-    public String snortGen(){
+    public String snortGen(ModelMap model,HttpServletRequest request){
+    	String uname=(String)request.getSession().getAttribute("viewer");
+    	model.put("regname", "Welcome"+" "+uname+" "+"!");
         return "rulegen.jsp";
     }
     @PostMapping(value={"rulepost","rulegen"})
@@ -40,6 +47,13 @@ public class snortRuleController {
         robj.addRuleFile();
         model.put("acknmessag","the local.rules rule file generated");
         return "rulegen.jsp";
-    }
 
+    }
+    @PostMapping(value="namepost")
+    public String nameGenfile(@RequestParam("name")String str ,ModelMap model,HttpSession session){
+    	session.setAttribute("viewer", str);
+    	model.put("regname", "Welcome"+" "+str+" "+"!");
+    	return "home.jsp";
+    }
+    
 }
