@@ -20,11 +20,12 @@
        </nav>
        </div>
        <div >
-       <form align="center" style="margin-top: 100px" method= "POST" action="fetchrule">
+       <form  align="center" style="margin-top: 100px" method= "POST" action="fetchrule" target = "_blank">
          <label for="sid">search term</label>
          <input type="text" id="search term" name="search term">
           <input style="margin-left:30px" type="submit">
        </form>
+       
         <p style="margin-top=5px"> ${rules} </p>
        </div>
        <div>
@@ -36,7 +37,8 @@
        <form action="saveToFile">
    			<input type="submit" value="Save to File">
 		</form>
-    </body>
+
+</body>
 </html>
 
 

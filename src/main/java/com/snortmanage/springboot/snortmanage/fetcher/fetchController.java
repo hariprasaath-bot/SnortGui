@@ -67,16 +67,23 @@ public class fetchController {
         if (search.matches("[a-zA-Z]+")) {
             System.out.println("protocol");
             List<SnortRuleConfig> rules = repo.findByprotocol(search);
+            
             System.out.println(rules);
+            int s = rules.size();
+            model.put("rows",s);
             model.put("rules", rules);
         } else if (isNumeric(search)) {
             SnortRuleConfig rule = repo.findById(Integer.valueOf(search)).orElse(new SnortRuleConfig());
             System.out.println("from data base +" + rule.getSid() + "...");
             System.out.println(rule);
+            int s = 1;
+            model.put("rows",s);
             model.put("rules", rule);
         } else if (isValidIPAddress(search)) {
             List<SnortRuleConfig> rules = repo.findBysrcip(search);
             System.out.println("ipaddr");
+            int s = rules.size();
+            model.put("rows",s);
             model.put("rules", rules);
         }
 	/*	model mod = repo.findById(var).orElse(new model());
@@ -84,7 +91,7 @@ public class fetchController {
 		if(mod.getRid()=="null") {
 			System.out.println("Null");
 			mod.setRid("Sorry No Rule");}*/
-        return "view.jsp";
+        return "table.jsp";
     }
     
     @RequestMapping("/saveToFile")
@@ -119,8 +126,7 @@ public class fetchController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	     
+		} 
 		
 		
 		ModelAndView mv = new ModelAndView();
