@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.regex.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.snortmanage.springboot.snortmanage.config.SnortRuleConfig;
 
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -71,8 +73,8 @@ public class fetchController {
         if (search.matches("[a-zA-Z]+")) {
             System.out.println("protocol");
             List<SnortRuleConfig> rules = repo.findByprotocol(search);
-
-            System.out.println(rules);
+            System.out.println(rules.get(0));
+            System.out.println(rules.get(1).getSid());
             int s = rules.size();
             model.put("rows",s);
             model.put("rules", rules);
@@ -130,6 +132,48 @@ public class fetchController {
         mv.setViewName("view.jsp");
         return mv;
     }
+    @PostMapping("/url")
+	public ModelAndView saveToDatabase(@RequestBody Map<String,String> data)
+	{
+		System.out.println("accepted from .............");
+		System.out.println("rid from script"+data);
+		System.out.println(data.get("rid"));
+		System.out.println(data.get("protocol"));
+		System.out.println(data.get("sip"));
+		SnortRuleConfig newRecord = new SnortRuleConfig();
+		newRecord.setSid(Integer.parseInt(data.get("rid")));
+		newRecord.setProtocol(data.get("protocol"));
+		newRecord.setSrcip(data.get("sip"));
+		newRecord.setSrc_port(data.get("sport"));
+		newRecord.setDst_ip(data.get("dip"));
+		newRecord.setDst_port(data.get("dport"));
+		newRecord.setMessage(data.get("msg"));
+		newRecord.setNum_pkts(data.get("npkts"));
+		System.out.println(newRecord);
+		repo.deleteById(Integer.parseInt(data.get("rid")));
+		repo.save(newRecord);
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("view.jsp");
+		
+		return mv;
+		
+	}
+    
+    @PostMapping("/url2")
+	public ModelAndView deleteFromDatabase(@RequestBody Map<String,String> data)
+	{
+		System.out.println("accepted from url2.............");
+		System.out.println("rid from script"+data);
+		System.out.println(data.get("rid"));
+		
+		repo.deleteById(Integer.parseInt(data.get("rid")));
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("view.jsp");
+		
+		return mv;
+		
+	}
 
     @PostMapping("/validate")
     public String ruleValidate(ModelMap model) throws IOException, InterruptedException {
