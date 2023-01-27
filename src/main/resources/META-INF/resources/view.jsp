@@ -9,7 +9,7 @@
         <script>
             var data = "${rules}";
             var Rows= "${rows}";
-            alert(Rows);
+            //alert(Rows);
             var ldata = data.split(",");
                                    /*alert(typeof(data));
                                    alert(data.length);
@@ -22,12 +22,12 @@
 				console.log("GHJK");
 				var id = this.getAttribute("id");
 				var no = id[5];
-				alert("Edit"+no);
+				//alert("Edit"+no);
 				document.getElementById("iedit"+no).style.display="none";
  				document.getElementById("isave"+no).style.display="block";
  				var rid = document.getElementById("idata"+(no+"0")); 	
 				var rid_data = rid.innerHTML;
-				alert(rid_data);
+				//alert("rid"+rid_data);
 				rid.innerHTML = "<input type = 'text' id = 'rid_text"+no+"' value = '"+rid_data+"'>"; 
 	
 				var protocol = document.getElementById("idata"+(no+"1")); 	
@@ -65,7 +65,7 @@
 				console.log("GHJK");
 				var id = this.getAttribute("id");
 				var no = id[5];
-				alert("save"+no);
+				//alert("save"+no);
 				
 				var rid_val = document.getElementById("rid_text"+no).value;
 				document.getElementById("idata"+(no+"0")).innerHTML = rid_val;
@@ -124,7 +124,25 @@
 				console.log("GHJK");
 				var id = this.getAttribute("id");
 				var no = id[7];
-				alert("delete"+no);
+				var rid = document.getElementById("idata"+(no+"0")); 	
+				var rid_data = rid.innerHTML;
+				//alert(rid_data);
+				
+				document.getElementById("irow"+no+"").outerHTML="";
+				var datav2=
+				{
+				rid:String(rid_data)
+				}
+				$.ajax({
+                    url: "/url2", 
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify(datav2)
+                });
 				
 			}
             
@@ -179,23 +197,33 @@
     			tr.setAttribute("id","irow"+i);
                for (let j = 0; j < 8; j++)
                {
+               		
                		var str = ldata[count];
+               		if(str.includes(" "))
+               		{
+               			var newstr = str.replace(" ","");
+               		}
+               		else
+               		{
+               			var newstr = str;
+               		}
+               			
       				if( i == 0 && j == 0)
       				{
-      					var newstr = str.replace("[","");
+      					var newstr1 = newstr.replace("[","");
       				}
       				else if( i == (Rows-1) && j == 7 )
       				{
-       					var newstr = str.replace("]","");
+       					var newstr1 = newstr.replace("]","");
       				}
       				else
       				{	
-      					var newstr = str;
+      					var newstr1 = newstr;
       				}
                    const td = tr.insertCell();
                    td.setAttribute("class",("cdata"+i)+j);
     			   td.setAttribute("id",("idata"+i)+j);
-                   td.appendChild(document.createTextNode(newstr));
+                   td.appendChild(document.createTextNode(newstr1));
                    td.style.border = '1px solid black';
                    count++;
 

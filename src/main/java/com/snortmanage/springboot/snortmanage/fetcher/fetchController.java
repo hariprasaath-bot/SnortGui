@@ -72,7 +72,7 @@ public class fetchController {
             System.out.println("protocol");
             List<SnortRuleConfig> rules = repo.findByprotocol(search);
             System.out.println(rules.get(0));
-            System.out.println(rules);
+            System.out.println(rules.get(1).getSid());
             int s = rules.size();
             model.put("rows",s);
             model.put("rules", rules);
@@ -150,6 +150,22 @@ public class fetchController {
 		System.out.println(newRecord);
 		repo.deleteById(Integer.parseInt(data.get("rid")));
 		repo.save(newRecord);
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("view.jsp");
+		
+		return mv;
+		
+	}
+    
+    @PostMapping("/url2")
+	public ModelAndView deleteFromDatabase(@RequestBody Map<String,String> data)
+	{
+		System.out.println("accepted from url2.............");
+		System.out.println("rid from script"+data);
+		System.out.println(data.get("rid"));
+		
+		repo.deleteById(Integer.parseInt(data.get("rid")));
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("view.jsp");
 		
