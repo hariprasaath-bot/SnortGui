@@ -14,7 +14,9 @@ public class snortStartController {
     @GetMapping(value="/snortstart")
     public  String snortStartPage(ModelMap model,HttpServletRequest request){
     	String uname=(String)request.getSession().getAttribute("viewer");
-    	model.put("regname", "Welcome"+" "+uname+" "+"!");
+    	if(uname!=null) {
+        	model.put("regname", "Welcome" + " " + uname + " " + "!");	
+        }
     	return "snortstart.jsp";
     }
     @PostMapping(value={"/start","/snortstar"})

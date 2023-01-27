@@ -33,7 +33,9 @@ public class fetchController {
     public String fetch(ModelMap model,HttpSession session,HttpServletRequest request) {
         System.out.println("accepted from fetch");
         String uname=(String)request.getSession().getAttribute("viewer");
-        model.put("regname", "Welcome"+" "+uname+" "+"!");
+        if(uname!=null) {
+        	model.put("regname", "Welcome" + " " + uname + " " + "!");	
+        }
         return "view.jsp";
     }
 

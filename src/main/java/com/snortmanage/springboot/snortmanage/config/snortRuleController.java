@@ -23,15 +23,12 @@ public class snortRuleController {
     @Autowired
     private SnortRuleRepo repo;
 
-    @GetMapping(value = {"home", ""})
-    public String snortForm() {
-        return "home.jsp";
-    }
-
     @GetMapping(value = {"rulegen"})
     public String snortGen(ModelMap model, HttpServletRequest request) {
         String uname = (String) request.getSession().getAttribute("viewer");
-        model.put("regname", "Welcome" + " " + uname + " " + "!");
+        if(uname!=null) {
+        	model.put("regname", "Welcome" + " " + uname + " " + "!");	
+        }
         return "rulegen.jsp";
     }
 
@@ -57,13 +54,6 @@ public class snortRuleController {
         model.put("acknmessag", "the local.rules rule file generated");
         return "rulegen.jsp";
 
-    }
-
-    @PostMapping(value = "namepost")
-    public String nameGenfile(@RequestParam("name") String str, ModelMap model, HttpSession session) {
-        session.setAttribute("viewer", str);
-        model.put("regname", "Welcome" + " " + str + " " + "!");
-        return "home.jsp";
     }
 
 }
