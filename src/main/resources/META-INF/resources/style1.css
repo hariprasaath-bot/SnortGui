@@ -55,6 +55,10 @@ form label{
     width:200px;
     display: inline-block;
 }
+.savebtn{
+    margin-top: 50px;
+        float:right;
+}
 .alert{
      margin-top: 50px;
      font-family: Georgia, 'Times New Roman', Times, serif;

@@ -37,8 +37,11 @@
         <input type="submit" value="Set Snort rule"><br><br>
     </form>
     <p>${generatedrule}</p>
-    <form action='repoSave'> <input type='submit' value='Save to Database'></form>
-    <form action="rulefile" method="POST"><input type="submit" value="Add rule to file"></form>
+    <div>
+    <form action='repoSave' method="POST"> <input type='submit' value='Save to Database' style='margin-left:50px; padding: 10px;' class='savebtn'></form>
+    <p>${repoAckn}</p>
+    <form action="rulefile" method="POST"><input type="submit" value="Add rule to file"  style='margin-left:50px; padding: 10px; margin-right:50px' class='savebtn'></form>
+    </div>
     </body>
 
 </html>
