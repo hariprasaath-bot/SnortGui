@@ -37,6 +37,7 @@
         <input type="submit" value="Set Snort rule"><br><br>
     </form>
     <p>${generatedrule}</p>
+    <form action='repoSave'> <input type='submit' value='Save to Database'></form>
     <form action="rulefile" method="POST"><input type="submit" value="Add rule to file"></form>
     </body>
 

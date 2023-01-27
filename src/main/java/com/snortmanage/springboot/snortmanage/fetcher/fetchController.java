@@ -24,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class fetchController {
+
+    private String ruleFilePath = "/etc/snort/rules/local.rules";
     @Autowired
     SnortRuleRepo repo;
 
@@ -67,7 +69,7 @@ public class fetchController {
         if (search.matches("[a-zA-Z]+")) {
             System.out.println("protocol");
             List<SnortRuleConfig> rules = repo.findByprotocol(search);
-            
+
             System.out.println(rules);
             int s = rules.size();
             model.put("rows",s);
@@ -86,54 +88,47 @@ public class fetchController {
             model.put("rows",s);
             model.put("rules", rules);
         }
-	/*	model mod = repo.findById(var).orElse(new model());
-		System.out.println("from data base +"+mod.getRid()+"...");
-		if(mod.getRid()=="null") {
-			System.out.println("Null");
-			mod.setRid("Sorry No Rule");}*/
-        return "table.jsp";
+        String scriptdata = "onerror='tableCreate()'";
+        model.put("functioncall",scriptdata);
+        return "view.jsp";
     }
-    
+
     @RequestMapping("/saveToFile")
-	public ModelAndView saveToFile()
-	{
-		List<SnortRuleConfig> data = new ArrayList<SnortRuleConfig>();
-	     repo.findAll().forEach(rule -> data.add(rule));
-	     try {
-	         File myObj = new File("rule.txt");
-	         if (myObj.createNewFile()) {
-	           System.out.println("File created: " + myObj.getName());
-	         } else {
-	           System.out.println("File already exists.");
-	           
-	         }
-	       } catch (IOException e) {
-	         System.out.println("An error occurred.");
-	         e.printStackTrace();
-	       }
-	     try {
-			FileWriter obj = new FileWriter("rule.txt");
-			BufferedWriter rulefile = new BufferedWriter(obj);
-			for(int i =0; i<data.size(); i++)
-		     {
-		    	 String str =data.get(i).ruleGenerator();
-		    	 rulefile.write(str);
-		    	 rulefile.newLine();
-		    	 System.out.println(data.get(i).toString());
-		    	 //System.out.println(getClass(data.get(i)));
-		     }
-			rulefile.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("view.jsp");
-		return mv;
-	}
-    
+    public ModelAndView saveToFile() {
+        List<SnortRuleConfig> data = new ArrayList<SnortRuleConfig>();
+        repo.findAll().forEach(rule -> data.add(rule));
+        try {
+            File myObj = new File(ruleFilePath);
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        try {
+            FileWriter obj = new FileWriter(ruleFilePath);
+            BufferedWriter rulefile = new BufferedWriter(obj);
+            for (int i = 0; i < data.size(); i++) {
+                String str = data.get(i).ruleGenerator();
+                rulefile.write(str);
+                rulefile.newLine();
+                System.out.println(data.get(i).toString());
+                //System.out.println(getClass(data.get(i)));
+            }
+            rulefile.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("view.jsp");
+        return mv;
+    }
+
     @PostMapping("/validate")
     public String ruleValidate(ModelMap model) throws IOException, InterruptedException {
         FetchRuleModel obj = new FetchRuleModel();
