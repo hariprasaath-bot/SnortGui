@@ -110,16 +110,12 @@ public class SnortRuleConfig {
 
     @Override
     public String toString() {
-        return "SnortRuleConfig{" +
-                "sid=" + sid +
-                ", protocol='" + protocol + '\'' +
-                ", srcip='" + srcip + '\'' +
-                ", src_port='" + src_port + '\'' +
-                ", dst_ip='" + dst_ip + '\'' +
-                ", dst_port='" + dst_port + '\'' +
-                ", message='" + message + '\'' +
-                ", num_pkts='" + num_pkts + '\'' +
-                '}';
+        return String.valueOf(sid)+','+ protocol + ','+ srcip + ',' 
+                + src_port + ','
+                + dst_ip + ',' 
+                + dst_port + ','
+                + message + ',' 
+                + num_pkts;
     }
 
     public String ruleGenerator(){

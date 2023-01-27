@@ -10,5 +10,7 @@ public interface SnortRuleRepo extends CrudRepository <SnortRuleConfig, Integer>
 
     List<SnortRuleConfig> findByprotocol(String var);
 
+	//void saveOrUpdate(SnortRuleConfig newRecord);
+
 }
 

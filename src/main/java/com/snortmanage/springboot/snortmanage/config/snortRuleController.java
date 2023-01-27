@@ -22,38 +22,48 @@ public class snortRuleController {
     private SnortRuleConfig robj;
     @Autowired
     private SnortRuleRepo repo;
-    @GetMapping(value={"home",""})
-    public  String snortForm(){
+
+    @GetMapping(value = {"home", ""})
+    public String snortForm() {
         return "home.jsp";
     }
 
-    @GetMapping(value={"rulegen"})
-    public String snortGen(ModelMap model,HttpServletRequest request){
-    	String uname=(String)request.getSession().getAttribute("viewer");
-    	model.put("regname", "Welcome"+" "+uname+" "+"!");
+    @GetMapping(value = {"rulegen"})
+    public String snortGen(ModelMap model, HttpServletRequest request) {
+        String uname = (String) request.getSession().getAttribute("viewer");
+        model.put("regname", "Welcome" + " " + uname + " " + "!");
         return "rulegen.jsp";
     }
-    @PostMapping(value={"rulepost","rulegen"})
-    public String snortGenHandle(SnortRuleConfig obj,ModelMap model) throws IOException {
+
+    @PostMapping(value = {"rulepost", "rulegen"})
+    public String snortGenHandle(SnortRuleConfig obj, ModelMap model) throws IOException {
         robj = obj;
-        robj.setSid(sid+=1);
+        robj.setSid(sid += 1);
         String drule = robj.ruleGenerator();
-        repo.save(robj);
-        model.put("generatedrule","The generated rule is: "+drule);
+        model.put("generatedrule", "The generated rule is: " + drule);
         return "rulegen.jsp";
     }
-    @PostMapping(value={"rulefile"})
+
+    @PostMapping("repoSave")
+    public String saveToDatabase(ModelMap model) {
+        repo.save(robj);
+        model.put("repoAckn", "Rule saved to database");
+        return "rulegen.jsp";
+    }
+
+    @PostMapping(value = {"rulefile"})
     public String snortGenfile(ModelMap model) throws IOException {
         robj.addRuleFile();
-        model.put("acknmessag","the local.rules rule file generated");
+        model.put("acknmessag", "the local.rules rule file generated");
         return "rulegen.jsp";
 
     }
-    @PostMapping(value="namepost")
-    public String nameGenfile(@RequestParam("name")String str ,ModelMap model,HttpSession session){
-    	session.setAttribute("viewer", str);
-    	model.put("regname", "Welcome"+" "+str+" "+"!");
-    	return "home.jsp";
+
+    @PostMapping(value = "namepost")
+    public String nameGenfile(@RequestParam("name") String str, ModelMap model, HttpSession session) {
+        session.setAttribute("viewer", str);
+        model.put("regname", "Welcome" + " " + str + " " + "!");
+        return "home.jsp";
     }
-    
+
 }
