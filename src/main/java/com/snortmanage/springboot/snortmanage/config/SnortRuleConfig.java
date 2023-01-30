@@ -128,7 +128,7 @@ public class SnortRuleConfig {
         System.out.println("hello "+rule);
         try {
 
-            FileWriter fWriter = new FileWriter("/etc/snort/rules/local.rules",true);
+            FileWriter fWriter = new FileWriter("C:\\Snort\\rules\\local.rules",true);
             BufferedWriter br = new BufferedWriter(fWriter);
             br.newLine();
             br.write(rule);

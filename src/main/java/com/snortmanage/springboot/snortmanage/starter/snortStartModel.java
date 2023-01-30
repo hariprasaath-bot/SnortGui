@@ -1,6 +1,9 @@
 package com.snortmanage.springboot.snortmanage.starter;
 
 import java.util.Objects;
+
+import com.snortmanage.springboot.snortmanage.alerts.alertModel;
+
 import java.io.*;
 import java.lang.*;
 
@@ -15,7 +18,7 @@ public class snortStartModel {
 
     private String inface = "wlp3s0";
 
-    private String confFilePath = "/etc/snort/test_snort.conf";
+    private String confFilePath = "C:/Snort/etc/test_snort.conf";
 
     private String logComp;
 
@@ -75,7 +78,8 @@ public class snortStartModel {
     public String idsHandle(boolean webwrite) throws IOException, InterruptedException {
 
         System.out.println("Staring SNORT IN IDS MODE");
-        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", confFilePath);
+        alertModel obj = new alertModel();
+        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp,"-q", "-i", inface, "-c", confFilePath);
         ps.redirectErrorStream(true);
         Process pr = ps.start();
         BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
@@ -85,8 +89,23 @@ public class snortStartModel {
             if (webwrite) {
                 //pr.waitFor();
                 System.out.println("ok!");
-                in.close();
-                return line;
+                System.out.println(line);
+                String[] list1 = line.split(" ");
+                for(int i =0;i<list1.length;i++)
+                {
+                	System.out.println(i+"th element is :"+list1[i]);
+                }
+                System.out.println(list1[0]);
+                System.out.println(list1[3].split(":")[1]);
+                String str =list1[7];
+                System.out.println("priority is :"+str.charAt(0));
+                obj.setTime(list1[0]);
+                obj.setRid(list1[3].split(":")[1]);
+                obj.setMsg(list1[4]);
+                obj.setPriority(""+list1[7].charAt(0));
+                obj.setProtocol(list1[8]);
+              
+               
             } else {
                 System.out.println(line);
             }
