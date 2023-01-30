@@ -68,13 +68,28 @@ public class fetchController {
 
     @PostMapping("/fetchrule")
     public String fetchdis(@RequestParam("search term") String search, ModelMap model) {
-        System.out.println("U entered  " + search);
+        System.out.println(search+",,,");
         //ModelAndView mv = new ModelAndView();
-        if (search.matches("[a-zA-Z]+")) {
+      
+       if (search.equals("any")) {
+           List<SnortRuleConfig> rules = repo.findBysrcip(search);
+           System.out.println("ipaddr");
+           int s = rules.size();
+           model.put("rows",s);
+           model.put("rules", rules);
+       }
+       else if (isValidIPAddress(search)) {
+           List<SnortRuleConfig> rules = repo.findBysrcip(search);
+           System.out.println("ipaddr");
+           int s = rules.size();
+           model.put("rows",s);
+           model.put("rules", rules);
+       }
+       else if (search.matches("[a-zA-Z]+") ) {
             System.out.println("protocol");
             List<SnortRuleConfig> rules = repo.findByprotocol(search);
             System.out.println(rules.get(0));
-            System.out.println(rules.get(1).getSid());
+           
             int s = rules.size();
             model.put("rows",s);
             model.put("rules", rules);
@@ -85,12 +100,6 @@ public class fetchController {
             int s = 1;
             model.put("rows",s);
             model.put("rules", rule);
-        } else if (isValidIPAddress(search)) {
-            List<SnortRuleConfig> rules = repo.findBysrcip(search);
-            System.out.println("ipaddr");
-            int s = rules.size();
-            model.put("rows",s);
-            model.put("rules", rules);
         }
         String scriptdata = "onerror='tableCreate()'";
         model.put("functioncall",scriptdata);
