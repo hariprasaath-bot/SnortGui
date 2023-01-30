@@ -55,13 +55,27 @@ form label{
     width:200px;
     display: inline-block;
 }
-.savebtn{
-    margin-top: 50px;
-        float:right;
+.rightlabel{
+    margin-top: 20px;
+    margin-left: 20px;
 }
 .alert{
      margin-top: 50px;
+     float: left;
      font-family: Georgia, 'Times New Roman', Times, serif;
      color: red;
      font-size: 25px;
+}
+.acknmsg{
+     font-family: Georgia, 'Times New Roman', Times, serif;
+     color: green;
+}
+.savebtn {
+    float:left;
+    margin-top: 200px;
+    margin-left: 400px;
+}
+.textbox{
+  width: 80px;
+  margin-bottom: 1em;
 }

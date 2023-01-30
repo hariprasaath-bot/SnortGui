@@ -6,21 +6,18 @@
     <link href="style1.css" rel="stylesheet">
 </head>
 <body>
-<div>
-    <div>
-         <body>
-               <nav>
-                <a href="home"><img class='zoom' src="snortlogo.jpg" align="left" width=150 height=80></img></a>
-                <label class="logo">SNORT Homepage</label>
-                <ul>
-                	<li><p>${regname}</p></li>
-                    <li><a href="rulegen">Generate snort rule</a></li>
-                    <li><a href='/rulefetch'>View snort rule</a></li>
-                    <li><a href='/snortstart'>starting snort</a></li>
-                </ul>
-               </nav>
-</div>
-<div>
+<nav>
+    <a href="home"><img align="left" class='zoom' height=80 src="snortlogo.jpg" width=150></img></a>
+    <label class="logo">SNORT Homepage</label>
+    <ul>
+        <li><p>${regname}</p></li>
+        <li><a href="rulegen">Generate snort rule</a></li>
+        <li><a href='/rulefetch'>View snort rule</a></li>
+        <li><a href='/snortstart'>starting snort</a></li>
+    </ul>
+</nav>
+
+<div align='center' style="margin-top: 200px;">
     <form  align="center" action="/start" method="POST">
         <label for="snortmode">Choose a mode:</label>
         <select class="fsty" id="snortMode" name="snortMode">
@@ -37,17 +34,6 @@
         <input class="fsty" type="Text" id="inface" name="inface">
         <input class="fsty" type="submit" value="Start the snort">
     </form>
-    <!--<form align="center" action="/start" method="POST">
-            <label for="snortmode">Choose a mode:</label>
-            <input type="Text" class="fsty" id="snortMode" name="snortMode">
-
-            <label for="logmode">Logging mode</label>
-            <input type="Text" class="fsty" id="logMode" name="logMode">
-
-            <label for="inface">Enter interface to monitor</label>
-            <input class="fsty" type="Text" id="inface" name="inface">
-            <input class="fsty" type="submit" value="Start the snort">
-        </form>-->
     <p align="center" class='alert'>${AlertMessage}</p>
 </div>
 </body>
