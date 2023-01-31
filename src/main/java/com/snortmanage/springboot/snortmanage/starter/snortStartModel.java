@@ -13,7 +13,7 @@ public class snortStartModel {
     private String logMode;
     private String logFilePath = "/home/hariprasaath/MainProject/";
 
-    private String inface = "wlp3s0";
+    private String inface;
 
     private String confFilePath = "/etc/snort/test_snort.conf";
 
@@ -39,6 +39,19 @@ public class snortStartModel {
         return inface;
     }
 
+    @Override
+    public String toString() {
+        return "snortStartModel{" +
+                "snortMode='" + snortMode + '\'' +
+                ", compArg='" + compArg + '\'' +
+                ", logMode='" + logMode + '\'' +
+                ", logFilePath='" + logFilePath + '\'' +
+                ", inface='" + inface + '\'' +
+                ", confFilePath='" + confFilePath + '\'' +
+                ", logComp='" + logComp + '\'' +
+                '}';
+    }
+
     public void setInface(String inface) {
         if (inface != "") {
             this.inface = inface;
@@ -61,6 +74,7 @@ public class snortStartModel {
             logComp = "console";
 
         }
+
         if (Objects.equals(logMode, "alerttoconsole")) {
             alert = idsHandle(false);
             return alert;
@@ -70,6 +84,7 @@ public class snortStartModel {
             return alert;
         }
         return alert;
+
     }
 //hello
     public String idsHandle(boolean webwrite) throws IOException, InterruptedException {

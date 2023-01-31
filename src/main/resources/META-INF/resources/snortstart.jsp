@@ -23,7 +23,7 @@
 <div>
     <form  align="center" action="/start" method="POST">
         <label for="snortmode">Choose a mode:</label>
-        <select class="fsty" id="snortMode" name="snortMode">
+        <select id="snortMode" name="snortMode">
             <option value="logging">logging</option>
             <option value="sniffing">sniffing</option>
             <option value="IDS">IDS</option>
@@ -33,21 +33,23 @@
             <option value="alerttoweb">alert to web</option>
             <option value="alerttoconsole">alert to console</option>
         </select>
-        <label for="inface">Enter interface to monitor</label>
-        <input class="fsty" type="Text" id="inface" name="inface">
+        <label for="network-interface">Enter interface to monitor</label>
+        <select id="inface" name="inface"><option value="">Please select</option></select>
+
         <input class="fsty" type="submit" value="Start the snort">
     </form>
-    <!--<form align="center" action="/start" method="POST">
-            <label for="snortmode">Choose a mode:</label>
-            <input type="Text" class="fsty" id="snortMode" name="snortMode">
+    <script >
+            var data = "${networkinterface}";
+            var Rows = "${rows}";
 
-            <label for="logmode">Logging mode</label>
-            <input type="Text" class="fsty" id="logMode" name="logMode">
+            var infacelist =  data.split(",");
 
-            <label for="inface">Enter interface to monitor</label>
-            <input class="fsty" type="Text" id="inface" name="inface">
-            <input class="fsty" type="submit" value="Start the snort">
-        </form>-->
+            var selectElement = document.getElementById('inface');
+            for (let i = 0; i < Rows; i++) {
+                console.log(infacelist[i]);
+                selectElement.add(new Option(infacelist[i]));
+            }
+        </script>
     <p align="center" class='alert'>${AlertMessage}</p>
 </div>
 </body>
