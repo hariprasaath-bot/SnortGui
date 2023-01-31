@@ -6,6 +6,13 @@ import jakarta.persistence.Id;
 @Entity
 public class alertModel {
 	@Id
+	private int alertid;
+	public int getAlertid() {
+		return alertid;
+	}
+	public void setAlertid(int alertid) {
+		this.alertid = alertid;
+	}
 	private String time;	
 	private String rid;
 	private String msg;
@@ -16,6 +23,7 @@ public class alertModel {
 	private String flow;
 	private String dst_ip;
 	private String dst_port;
+	
     public String getTime() {
 		return time;
 	}
@@ -75,6 +83,12 @@ public class alertModel {
 	}
 	public void setDst_port(String dst_port) {
 		this.dst_port = dst_port;
+	}
+	@Override
+	public String toString() {
+		return "alertModel [alertid=" + alertid + ", time=" + time + ", rid=" + rid + ", msg=" + msg + ", priority="
+				+ priority + ", protocol=" + protocol + ", srcip=" + srcip + ", src_port=" + src_port + ", flow=" + flow
+				+ ", dst_ip=" + dst_ip + ", dst_port=" + dst_port + "]";
 	}
 	
 	

@@ -17,6 +17,11 @@
             <li><a href='/snortstart'>starting snort</a></li>
         </ul>
        </nav>
+       <form action="home" method="POST" style="width: 400px; padding: 10px;margin-left: 150px";>
+       	<label for="name">Enter your name: </label>
+        <input type="text" name="name" id="name"><br><br>
+       	<input type="submit" value="submit">
+       </form>
     </body>
 </html>
 

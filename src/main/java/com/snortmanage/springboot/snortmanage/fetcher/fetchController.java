@@ -11,6 +11,8 @@ import java.util.Map;
 
 import com.snortmanage.springboot.snortmanage.config.SnortRuleConfig;
 
+import com.snortmanage.springboot.snortmanage.usermanager.UserController;
+import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -25,9 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class fetchController {
+public class fetchController{
 
-    private String ruleFilePath = "/etc/snort/rules/local.rules";
+    private final String ruleFilePath = "/etc/snort/rules/local.rules";
     @Autowired
     SnortRuleRepo repo;
 
@@ -36,7 +38,7 @@ public class fetchController {
         System.out.println("accepted from fetch");
         String uname=(String)request.getSession().getAttribute("viewer");
         if(uname!=null) {
-        	model.put("regname", "Welcome" + " " + uname + " " + "!");	
+        	model.put("regname", "Welcome" + " " + uname + " " + "!");
         }
         return "view.jsp";
     }
@@ -68,50 +70,61 @@ public class fetchController {
 
     @PostMapping("/fetchrule")
     public String fetchdis(@RequestParam("search term") String search, ModelMap model) {
-        System.out.println(search+",,,");
+        System.out.println("Your query is  " + search);
         //ModelAndView mv = new ModelAndView();
-      
-       if (search.equals("any")) {
-           List<SnortRuleConfig> rules = repo.findBysrcip(search);
-           System.out.println("ipaddr");
-           int s = rules.size();
-           model.put("rows",s);
-           model.put("rules", rules);
-       }
-       else if (isValidIPAddress(search)) {
-           List<SnortRuleConfig> rules = repo.findBysrcip(search);
-           System.out.println("ipaddr");
-           int s = rules.size();
-           model.put("rows",s);
-           model.put("rules", rules);
-       }
-       else if (search.matches("[a-zA-Z]+") ) {
-            System.out.println("protocol");
+
+
+        if (search.matches("[a-zA-Z]+")) {                  //Search for protocol
             List<SnortRuleConfig> rules = repo.findByprotocol(search);
-            System.out.println(rules.get(0));
-           
-            int s = rules.size();
-            model.put("rows",s);
-            model.put("rules", rules);
-        } else if (isNumeric(search)) {
+            if (rules.isEmpty()) {
+                System.out.println(search + " NO match found");
+                model.put("noRule","NO match found");
+            } else {
+                int noOfRules = rules.size();
+                model.put("rows", noOfRules);
+                model.put("rules", rules);
+                System.out.println(rules);
+                String scriptdata = "onerror='tableCreate()'";
+                model.put("functioncall", scriptdata);
+            }
+        } else if (isNumeric(search)) {                             //Search for rule sid
             SnortRuleConfig rule = repo.findById(Integer.valueOf(search)).orElse(new SnortRuleConfig());
-            System.out.println("from data base +" + rule.getSid() + "...");
-            System.out.println(rule);
-            int s = 1;
-            model.put("rows",s);
-            model.put("rules", rule);
+            if (rule.equals(null)) {
+                System.out.println(search + " NO match found");
+                model.put("noRule","NO match found");
+            }else {
+                int noOfRules = 1;              //Always one -- unique sid
+                model.put("rows", noOfRules);
+                model.put("rules", rule);
+                System.out.println(rule);
+                String scriptdata = "onerror='tableCreate()'";
+                model.put("functioncall", scriptdata);
+            }
+        } else if (isValidIPAddress(search)) {                      //search for IP ADDRESS
+            List<SnortRuleConfig> rules = repo.findBysrcip(search);
+            if (rules.isEmpty()) {
+                System.out.println(search + " NO match found");
+                model.put("noRule","NO match found");
+            } else {
+                int noOfRules = rules.size();
+                model.put("rows", noOfRules);
+                model.put("rules", rules);
+                System.out.println(rules);
+                String scriptdata = "onerror='tableCreate()'";
+                model.put("functioncall", scriptdata);
+            }
         }
-        String scriptdata = "onerror='tableCreate()'";
-        model.put("functioncall",scriptdata);
         return "view.jsp";
     }
 
     @RequestMapping("/saveToFile")
-    public ModelAndView saveToFile() {
+    public ModelAndView saveToFile(HttpServletRequest request) {
+        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+
         List<SnortRuleConfig> data = new ArrayList<SnortRuleConfig>();
         repo.findAll().forEach(rule -> data.add(rule));
         try {
-            File myObj = new File(ruleFilePath);
+            File myObj = new File(logobj.getRuleFilePath());
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
@@ -123,7 +136,7 @@ public class fetchController {
             e.printStackTrace();
         }
         try {
-            FileWriter obj = new FileWriter(ruleFilePath);
+            FileWriter obj = new FileWriter(logobj.getRuleFilePath());
             BufferedWriter rulefile = new BufferedWriter(obj);
             for (int i = 0; i < data.size(); i++) {
                 String str = data.get(i).ruleGenerator();
@@ -142,52 +155,67 @@ public class fetchController {
         return mv;
     }
     @PostMapping("/url")
-	public ModelAndView saveToDatabase(@RequestBody Map<String,String> data)
-	{
-		System.out.println("accepted from .............");
-		System.out.println("rid from script"+data);
-		System.out.println(data.get("rid"));
-		System.out.println(data.get("protocol"));
-		System.out.println(data.get("sip"));
-		SnortRuleConfig newRecord = new SnortRuleConfig();
-		newRecord.setSid(Integer.parseInt(data.get("rid")));
-		newRecord.setProtocol(data.get("protocol"));
-		newRecord.setSrcip(data.get("sip"));
-		newRecord.setSrc_port(data.get("sport"));
-		newRecord.setDst_ip(data.get("dip"));
-		newRecord.setDst_port(data.get("dport"));
-		newRecord.setMessage(data.get("msg"));
-		newRecord.setNum_pkts(data.get("npkts"));
-		System.out.println(newRecord);
-		repo.deleteById(Integer.parseInt(data.get("rid")));
-		repo.save(newRecord);
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("view.jsp");
-		
-		return mv;
-		
-	}
-    
+    public ModelAndView saveToDatabase(@RequestBody Map<String, String> data) {
+        System.out.println("accepted from .............");
+        System.out.println("rid from script" + data);
+        System.out.println(data.get("rid"));
+        System.out.println(data.get("protocol"));
+        System.out.println(data.get("sip"));
+
+        //Creating a new record for each save
+        SnortRuleConfig newRecord = new SnortRuleConfig();
+        newRecord.setSid(Integer.parseInt(data.get("rid")));
+        newRecord.setProtocol(data.get("protocol"));
+        newRecord.setSrcip(data.get("sip"));
+        newRecord.setSrc_port(data.get("sport"));
+        newRecord.setDst_ip(data.get("dip"));
+        newRecord.setDst_port(data.get("dport"));
+        newRecord.setMessage(data.get("msg"));
+        newRecord.setNum_pkts(data.get("npkts"));
+        System.out.println(newRecord);
+        repo.save(newRecord);
+
+        //Deleting
+        repo.deleteById(Integer.parseInt(data.get("id")));
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("view.jsp");
+
+        return mv;
+
+    }
+
     @PostMapping("/url2")
-	public ModelAndView deleteFromDatabase(@RequestBody Map<String,String> data)
-	{
-		System.out.println("accepted from url2.............");
-		System.out.println("rid from script"+data);
-		System.out.println(data.get("rid"));
-		
-		repo.deleteById(Integer.parseInt(data.get("rid")));
-		
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("view.jsp");
-		
-		return mv;
-		
-	}
+    public ModelAndView deleteFromDatabase(@RequestBody Map<String, String> data) {
+        System.out.println("accepted from url2.............");
+        System.out.println("rid from script" + data);
+        System.out.println(data.get("rid"));
+
+        repo.deleteById(Integer.parseInt(data.get("rid")));
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("view.jsp");
+
+        return mv;
+
+    }
 
     @PostMapping("/validate")
-    public String ruleValidate(ModelMap model) throws IOException, InterruptedException {
+    public String ruleValidate(ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
+        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
         FetchRuleModel obj = new FetchRuleModel();
+        obj.setLogobj(logobj);
         String validator = obj.ruleValidation();
+        model.put("acknowledge", validator);
+        return "view.jsp";
+    }
+
+    @PostMapping("/deletefile")
+    public String ruleFileDelete(ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
+        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+        FetchRuleModel obj = new FetchRuleModel();
+        obj.setLogobj(logobj);
+        String validator = obj.ruleFileDelete();
         model.put("acknowledge", validator);
         return "view.jsp";
     }

@@ -1,5 +1,7 @@
 package com.snortmanage.springboot.snortmanage.config;
 
+import com.snortmanage.springboot.snortmanage.usermanager.UserController;
+import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
@@ -10,7 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 @Entity
-public class SnortRuleConfig {
+public class SnortRuleConfig extends UserController {
 
     @Id
     private int sid;
@@ -22,6 +24,7 @@ public class SnortRuleConfig {
     private String message;
     private String num_pkts;
 
+
     public void setSid(int sid) {
         this.sid = sid;
     }
@@ -30,6 +33,13 @@ public class SnortRuleConfig {
     }
     @Transient
     private  String rule;
+
+    public UserModel getLogobj() {
+        return logobj;
+    }
+
+    @Transient
+    private UserModel logobj;
     public String getProtocol() {
         return protocol;
     }
@@ -53,6 +63,10 @@ public class SnortRuleConfig {
             this.srcip = "any";
         }
     }
+    public void setLogobj(UserModel logobj) {
+        this.logobj = logobj;
+    }
+
 
     public String getSrc_port() {
         return src_port;
@@ -110,12 +124,7 @@ public class SnortRuleConfig {
 
     @Override
     public String toString() {
-        return String.valueOf(sid)+','+ protocol + ','+ srcip + ',' 
-                + src_port + ','
-                + dst_ip + ',' 
-                + dst_port + ','
-                + message + ',' 
-                + num_pkts;
+        return Integer.toString(sid)+','+ protocol + ','+ srcip + ',' + src_port + ',' + dst_ip + ','+ dst_port + ','+ message + ',' + num_pkts;
     }
 
     public String ruleGenerator(){
@@ -128,12 +137,15 @@ public class SnortRuleConfig {
         System.out.println("hello "+rule);
         try {
 
+
             FileWriter fWriter = new FileWriter("C:\\Snort\\rules\\local.rules",true);
-            BufferedWriter br = new BufferedWriter(fWriter);
+
+            FileWriter fWriter1 = new FileWriter(logobj.getRuleFilePath(),true);
+            BufferedWriter br = new BufferedWriter(fWriter1);
             br.newLine();
             br.write(rule);
             br.close();
-            fWriter.close();
+            fWriter1.close();
             System.out.println( "File is created successfully with the content.");
         }
         // Catch block to handle if exception occurs
