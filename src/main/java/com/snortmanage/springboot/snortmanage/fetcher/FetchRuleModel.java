@@ -16,7 +16,7 @@ public class FetchRuleModel extends UserController {
     public String ruleValidation() throws IOException, InterruptedException {
 
 
-        ProcessBuilder ps = new ProcessBuilder("snort", "-T", "-c", logobj.getConfFilePath());
+        ProcessBuilder ps = new ProcessBuilder("snort", "-T", "-i", "5", "-c", logobj.getConfFilePath());
         Process pr = ps.start();
         BufferedReader in;
         in = new BufferedReader(new InputStreamReader(pr.getErrorStream()));

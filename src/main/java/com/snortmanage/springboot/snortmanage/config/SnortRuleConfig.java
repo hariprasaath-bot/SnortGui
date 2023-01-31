@@ -137,12 +137,15 @@ public class SnortRuleConfig extends UserController {
         System.out.println("hello "+rule);
         try {
 
-            FileWriter fWriter = new FileWriter(logobj.getRuleFilePath(),true);
-            BufferedWriter br = new BufferedWriter(fWriter);
+
+            FileWriter fWriter = new FileWriter("C:\\Snort\\rules\\local.rules",true);
+
+            FileWriter fWriter1 = new FileWriter(logobj.getRuleFilePath(),true);
+            BufferedWriter br = new BufferedWriter(fWriter1);
             br.newLine();
             br.write(rule);
             br.close();
-            fWriter.close();
+            fWriter1.close();
             System.out.println( "File is created successfully with the content.");
         }
         // Catch block to handle if exception occurs
