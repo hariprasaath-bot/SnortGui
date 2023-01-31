@@ -1,21 +1,32 @@
 package com.snortmanage.springboot.snortmanage.starter;
 
+import com.snortmanage.springboot.snortmanage.usermanager.UserController;
+import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
+
 import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.snortmanage.springboot.snortmanage.alerts.alertModel;
+import com.snortmanage.springboot.snortmanage.alerts.alertRepo;
+
 import java.io.*;
 import java.lang.*;
 
-// snort compile code: snort -A console -i wlp3s0 -q -c /etc/snort/test_snort.conf
-// snort -A full -l /home/hariprasaath/versions/miniproject_bash -i wlp3s0  -c /etc/snort/test_snort.conf
-public class snortStartModel {
+//snort compile code: snort -A console -i wlp3s0 -q -c /etc/snort/test_snort.conf
+//snort -A full -l /home/hariprasaath/versions/miniproject_bash -i wlp3s0  -c /etc/snort/test_snort.conf
+public class snortStartModel extends UserController {
+	
+	
+	
     private String snortMode;
     private String compArg;
 
     private String logMode;
-    private String logFilePath = "/home/hariprasaath/MainProject/";
+
+    private UserModel logobj;
 
     private String inface;
-
-    private String confFilePath = "/etc/snort/test_snort.conf";
 
     private String logComp;
 
@@ -38,6 +49,9 @@ public class snortStartModel {
     public String getInface() {
         return inface;
     }
+    public void setLogobj(UserModel logobj) {
+        this.logobj = logobj;
+    }
 
     @Override
     public String toString() {
@@ -53,13 +67,14 @@ public class snortStartModel {
     }
 
     public void setInface(String inface) {
-        if (inface != "") {
+        if (!Objects.equals(inface, "")) {
             this.inface = inface;
         } else {
             this.inface = "wlp3s0";
         }
     }
-
+    
+	
     //ProcessBuilder ps = new ProcessBuilder("snort", "-A", "console", "-i", "wlp3s0", "-q", "-c", "/etc/snort/test_snort.conf");
     public String snortStarter() throws IOException, InterruptedException {
         String alert = "";
@@ -86,22 +101,52 @@ public class snortStartModel {
         return alert;
 
     }
-//hello
+//hell0
+    
+    
+	private alertRepo repos;
+    	
+	
+    //private alertModel obj;
+    
     public String idsHandle(boolean webwrite) throws IOException, InterruptedException {
-
-        System.out.println("Staring SNORT IN IDS MODE");
-        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", confFilePath);
+    	
+    	
+    	
+        System.out.println("Staring SNORT IN IDS MODE");        
+        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", logobj.getConfFilePath());
         ps.redirectErrorStream(true);
         Process pr = ps.start();
         BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
         String line = "";
+        int count =1;
         while ((line = in.readLine()) != null) {
 
             if (webwrite) {
                 //pr.waitFor();
                 System.out.println("ok!");
-                in.close();
-                return line;
+                System.out.println(line);
+                String[] list1 = line.split(" ");        
+                
+                alertModel obj = new alertModel();
+                obj.setAlertid(count);
+                obj.setTime(list1[0]);
+                obj.setRid(list1[3].split(":")[1]);
+                obj.setMsg(list1[4]);
+                obj.setPriority(""+list1[7].charAt(0));
+                obj.setProtocol(list1[8].replace("{","" ).replace("}",""));              
+                obj.setSrcip(list1[9].split(":")[0]);
+                obj.setSrc_port(list1[9].split(":")[1]);
+                obj.setFlow(list1[10]);
+                obj.setDst_ip(list1[11].split(":")[0]);
+                obj.setDst_port(list1[11].split(":")[1]);
+                System.out.println("Object is "+obj);
+                
+                this.repos.save(obj);
+                count++;
+                
+              
+               
             } else {
                 System.out.println(line);
             }
@@ -109,7 +154,7 @@ public class snortStartModel {
         //pr.waitFor();
         System.out.println("ok!");
         in.close();
-        return line;
+        return null;
     }
 
     public void snifferHandle() throws IOException, InterruptedException {
@@ -127,4 +172,10 @@ public class snortStartModel {
 
         in.close();
     }
+
+	public void setRepos(alertRepo repos) {
+		// TODO Auto-generated method stub
+		this.repos = repos;
+		
+	}
 }

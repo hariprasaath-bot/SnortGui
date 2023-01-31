@@ -18,30 +18,29 @@
         </ul>
        </nav> 
        <h4> Just for single application need well-defined UI</h4>
-       <form action="/rulepost" method="POST"; style="width: 700px; padding: 10px;margin-left: 500px";>
+       <form action="/rulepost" method="POST"; style="padding: 10px;margin-left: 500px";>
         <!--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />-->
         <label for="protocol">Enter protocol: </label>
-        <input type="text" name="protocol" id="protocol"><br><br>
-        <label for="srcip">Enter src ip: </label>
+        <input type="text" name="protocol" id="protocol">
+        <label  class='rightlabel' for="srcip">Enter src ip: </label>
         <input type="text" name="srcip" id="srcip"><br><br>
         <label for="src_port">Enter src port: </label>
-        <input type="text" name="src_port" id="src_port"><br><br>
-        <label for="dst_ip">Enter dst ip: </label>
+        <input type="text" name="src_port" id="src_port">
+        <label class='rightlabel' for="dst_ip">Enter dst ip: </label>
         <input type="text" name="dst_ip" id="dst_ip"><br><br>
         <label for="dst_port">Enter dst port: </label>
-        <input type="text" name="dst_port" id="dst_port"><br><br>
-        <label for="message">Enter alert message: </label>
+        <input type="text" name="dst_port" id="dst_port">
+        <label class='rightlabel' for="message">Enter alert message: </label>
         <input type="text" name="message" id="message" required><br><br>
-        <label for="num_pkts">Enter no. of packets: </label>
-        <input type="text" name="num_pkts" id="num_pkts" required><br><br>
-        <input type="submit" value="Set Snort rule"><br><br>
+        <label style='margin-top:20px' for="num_pkts">Enter no. of packets: </label>
+        <input type="text" name="num_pkts" id="num_pkts" required>
+        <input style='margin-left:20px' class='rigthlabel' type="submit" value="Set Snort rule"><br><br>
     </form>
-    <p>${generatedrule}</p>
-    <div>
-    <form action='repoSave' method="POST"> <input type='submit' value='Save to Database' style='margin-left:50px; padding: 10px;' class='savebtn'></form>
-    <p>${repoAckn}</p>
-    <form action="rulefile" method="POST"><input type="submit" value="Add rule to file"  style='margin-left:50px; padding: 10px; margin-right:50px' class='savebtn'></form>
-    </div>
+    <form action='repoSave' method="POST"> <input type='submit' value='Save to Database' style='margin-left:50px;' class='savebtn'></form>
+    <form action="rulefile" method="POST"><input type="submit" value="Add rule to file"  style='margin-left:50px; margin-right:50px' class='savebtn'></form>
+    <p class='acknmsg'>${generatedrule}</p>
+    <p class='acknmsg'>${fileackn}</p>
+    <p class='acknmsg'>${repoAckn}</p>
     </body>
 
 </html>

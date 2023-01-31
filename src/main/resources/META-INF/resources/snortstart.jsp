@@ -52,5 +52,23 @@
         </script>
     <p align="center" class='alert'>${AlertMessage}</p>
 </div>
+	<script>
+
+		var data1 = "${data}";
+		console.log(data1);
+		var list1 = data1.split("alertModel")
+		var no_of_rows = list1.length;
+		for (var i=1;i<no_of_rows;i++)
+		{
+			var p = document.createElement("p");
+			var breakElement = document.createElement("br");
+			var textnode = document.createTextNode(i+" "+list1[i])
+			p.appendChild(textnode);
+			var divElement = document.getElementById("alerts");
+			divElement.appendChild(p);
+			divElement.appendChild(breakElement);
+		}
+	</script>
+
 </body>
 </html>
