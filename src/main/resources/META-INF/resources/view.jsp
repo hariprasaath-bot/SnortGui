@@ -53,7 +53,7 @@
 				
 				var msg = document.getElementById("idata"+no+"6"); 	
 				var msg_data = msg.innerHTML;
-				msg.innerHTML = "<input type='text' class='textbox' id=msg_text"+no+"' value='"+msg_data+"'>";
+				msg.innerHTML = "<input type='text' class='textbox' id='msg_text"+no+"' value='"+msg_data+"'>";
 				
 				var npkts = document.getElementById("idata"+no+"7"); 	
 				var npkts_data = npkts.innerHTML;

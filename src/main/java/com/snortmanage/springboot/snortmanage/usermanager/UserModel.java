@@ -3,6 +3,7 @@ package com.snortmanage.springboot.snortmanage.usermanager;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
+import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 public class UserModel {
@@ -21,8 +22,8 @@ public class UserModel {
         this.ruleFilePath = ruleFilePath;
     }
 
-    public void setOpertatingSystem(String opertatingSystem) {
-        this.opertatingSystem = opertatingSystem;
+    public void setOperatingSystem(String operatingSystem) {
+        this.operatingSystem = operatingSystem;
     }
 
     @Transient
@@ -35,7 +36,7 @@ public class UserModel {
     private String email;
     private String username;
     private String password;
-    private String opertatingSystem;
+    private String operatingSystem;
 
 
     public String getEmail() {
@@ -59,7 +60,7 @@ public class UserModel {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = hashPassword(password);
     }
     public String getConfFilePath() { return confFilePath; }
 
@@ -68,24 +69,16 @@ public class UserModel {
     public String getLogFilePath() { return logFilePath; }
 
     public String getOperatingSystem() {
-        return opertatingSystem;
+        return operatingSystem;
     }
 
     public void setOpertatingSystem() {
-        this.opertatingSystem = String.valueOf(getOS());
+        this.operatingSystem = String.valueOf(getOS());
     }
 
     @Override
     public String toString() {
-        return "UserModel{" +
-                "logFilePath='" + logFilePath + '\'' +
-                ", confFilePath='" + confFilePath + '\'' +
-                ", ruleFilePath='" + ruleFilePath + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", opertatingSystem='" + opertatingSystem + '\'' +
-                '}';
+        return  email + ',' + username +',' + operatingSystem;
     }
 
     //OS detection function
@@ -107,21 +100,24 @@ public class UserModel {
         return os;
     }
 
+    private String hashPassword(String plainTextPassword){
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
     public void pathSetter() {
-        opertatingSystem = opertatingSystem.toLowerCase();
-        if (this.opertatingSystem.contains("win")) {
+        operatingSystem = operatingSystem.toLowerCase();
+        if (this.operatingSystem.contains("win")) {
             setRuleFilePath("/etc/snort/rules/local.rules");
             setLogFilePath("/home/hariprasaath/MainProject/");
             setConfFilePath("/etc/snort/test_snort.conf");
-        } else if (opertatingSystem.contains("nix") || opertatingSystem.contains("nux")
-                || opertatingSystem.contains("aix")) {
+        } else if (operatingSystem.contains("nix") || operatingSystem.contains("nux")
+                || operatingSystem.contains("aix")) {
 
             setRuleFilePath("/etc/snort/rules/local.rules");
             setLogFilePath("/home/hariprasaath/MainProject/");
             setConfFilePath("/etc/snort/test_snort.conf");
 
-        } else if (this.opertatingSystem.contains("mac")) {// Need to be implemented
-        } else if (this.opertatingSystem.contains("sunos")) { // Need to be implemented
+        } else if (this.operatingSystem.contains("mac")) {// Need to be implemented
+        } else if (this.operatingSystem.contains("sunos")) { // Need to be implemented
         }
 
     }

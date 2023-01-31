@@ -2,6 +2,7 @@ package com.snortmanage.springboot.snortmanage.usermanager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,7 +32,7 @@ public class UserController {
     @GetMapping(value = {"home", ""})
     public String home(ModelMap model, HttpServletRequest request) {
         String uname = (String) request.getSession().getAttribute("viewer");
-        if(uname!=null) {
+        if (uname != null) {
             model.put("regname", "Welcome" + " " + uname + " " + "!");
         }
         return "home.jsp";
@@ -55,7 +56,7 @@ public class UserController {
     public String userlogin(@RequestParam Map<String, String> requestParams, ModelMap model, HttpSession session) {
         logobj = repo.findByusername(requestParams.get("username"));
         String pass = requestParams.get("password");
-        if (logobj.getPassword().equals(pass)) {
+        if (BCrypt.checkpw(pass, logobj.getPassword())) {
             logobj.pathSetter();
             session.setAttribute("logobj", logobj);
             return "home.jsp";
@@ -64,4 +65,5 @@ public class UserController {
             return "login.jsp";
         }
     }
+
 }
