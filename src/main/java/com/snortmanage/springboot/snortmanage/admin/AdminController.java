@@ -1,5 +1,6 @@
 package com.snortmanage.springboot.snortmanage.admin;
 
+import com.snortmanage.springboot.snortmanage.fetcher.SnortRuleRepo;
 import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
 import com.snortmanage.springboot.snortmanage.usermanager.UserRegRepo;
 import jakarta.servlet.http.HttpSession;
@@ -20,12 +21,16 @@ public class AdminController {
 
     @Autowired
     private UserRegRepo repo;
+
+    @Autowired
+    private SnortRuleRepo ruleRepo;
+
     @PostMapping(value = "adminlogin")
     public String userlogin(@RequestParam Map<String, String> requestParams, ModelMap model, HttpSession session) {
         String admin = requestParams.get("adminname");
         String pass = requestParams.get("adminpassword");
         AdminModel objAdminModel = new AdminModel();
-        if (admin.equals(objAdminModel.getUsername()) && admin.equals(objAdminModel.getUsername()) ) {
+        if (admin.equals(objAdminModel.getUsername()) && admin.equals(objAdminModel.getUsername())) {
             return "adminpage.jsp";
         } else {
             model.put("wrongpassword", "Admin Password doesn't match,enter correct password");
@@ -38,10 +43,10 @@ public class AdminController {
         System.out.println("USER TABLE: Your query is  " + search);
 
         if (search.contains("@.com")) {                  //Search for protocol
-            List<UserModel> users= repo.findByemail(search);
+            List<UserModel> users = repo.findByemail(search);
             if (users.isEmpty()) {
                 System.out.println(search + " NO match found");
-                model.put("noRule","NO match found");
+                model.put("noRule", "NO match found");
             } else {
                 int noOfUsers = users.size();
                 model.put("rows", noOfUsers);
@@ -49,11 +54,11 @@ public class AdminController {
                 String scriptdata = "onerror='tableCreate()'";
                 model.put("functioncall", scriptdata);
             }
-        } else if (search.toLowerCase().contains("linux") || search.toLowerCase().contains("windows") ) {                             //Search for rule sid
-            List<UserModel> users= repo.findByoperatingSystem(search);
+        } else if (search.toLowerCase().contains("linux") || search.toLowerCase().contains("windows")) {                             //Search for rule sid
+            List<UserModel> users = repo.findByoperatingSystem(search);
             if (users.isEmpty()) {
                 System.out.println(search + " NO match found");
-                model.put("noRule","NO match found");
+                model.put("noRule", "NO match found");
             } else {
                 int noOfUsers = users.size();
                 model.put("rows", noOfUsers);
@@ -64,14 +69,15 @@ public class AdminController {
         }
         return "adminpage.jsp";
     }
+
     @PostMapping("/viewall")
     public String userdata(ModelMap model) {
 
         List<UserModel> data = new ArrayList<UserModel>();
         repo.findAll().forEach(user -> data.add(user));
         if (data.isEmpty()) {
-            model.put("noRule","NO match found");
-        }else {
+            model.put("noRule", "NO match found");
+        } else {
             int noOfUsers = data.size();
             model.put("rows", noOfUsers);
             model.put("users", data);
@@ -80,6 +86,7 @@ public class AdminController {
         }
         return "adminpage.jsp";
     }
+
     @PostMapping("/edited")
     public ModelAndView saveToDatabase(@RequestBody Map<String, String> user) {
 
@@ -103,6 +110,7 @@ public class AdminController {
 
         return mv;
     }
+
     @PostMapping("/deleteby")
     public ModelAndView deleteFromUserDatabase(@RequestBody Map<String, String> data) {
 
@@ -113,7 +121,6 @@ public class AdminController {
         mv.setViewName("adminpage.jsp");
 
         return mv;
-
     }
 
 }

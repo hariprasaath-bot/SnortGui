@@ -1,5 +1,6 @@
 package com.snortmanage.springboot.snortmanage.starter;
 
+import com.snortmanage.springboot.snortmanage.alerts.alertRepo;
 import com.snortmanage.springboot.snortmanage.usermanager.UserController;
 import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
 
@@ -24,9 +25,24 @@ public class snortStartModel extends UserController {
 
     private String logMode;
 
+    public void setLogobj(UserModel logobj) {
+        this.logobj = logobj;
+    }
+
+    public void setConfFilePath(String confFilePath) {
+        this.confFilePath = confFilePath;
+    }
+
+    public void setLogFilePath(String logFilePath) {
+        this.logFilePath = logFilePath;
+    }
+
     private UserModel logobj;
 
-    private String inface;
+    private String inface = "wlp3s0";
+
+    private String confFilePath ;
+    private String logFilePath ;
 
     private String logComp;
 
@@ -49,9 +65,7 @@ public class snortStartModel extends UserController {
     public String getInface() {
         return inface;
     }
-    public void setLogobj(UserModel logobj) {
-        this.logobj = logobj;
-    }
+
 
     @Override
     public String toString() {
@@ -73,8 +87,7 @@ public class snortStartModel extends UserController {
             this.inface = "wlp3s0";
         }
     }
-    
-	
+
     //ProcessBuilder ps = new ProcessBuilder("snort", "-A", "console", "-i", "wlp3s0", "-q", "-c", "/etc/snort/test_snort.conf");
     public String snortStarter() throws IOException, InterruptedException {
         String alert = "";
@@ -89,7 +102,6 @@ public class snortStartModel extends UserController {
             logComp = "console";
 
         }
-
         if (Objects.equals(logMode, "alerttoconsole")) {
             alert = idsHandle(false);
             return alert;
@@ -99,54 +111,53 @@ public class snortStartModel extends UserController {
             return alert;
         }
         return alert;
-
     }
 //hell0
-    
-    
+
+
 	private alertRepo repos;
-    	
-	
+
+
     //private alertModel obj;
-    
+
     public String idsHandle(boolean webwrite) throws IOException, InterruptedException {
-    	
-    	
-    	
-        System.out.println("Staring SNORT IN IDS MODE");        
-        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", logobj.getConfFilePath());
+
+
+
+        System.out.println("Staring SNORT IN IDS MODE");
+        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", confFilePath);
         ps.redirectErrorStream(true);
         Process pr = ps.start();
         BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+        int count = 1;
         String line = "";
-        int count =1;
         while ((line = in.readLine()) != null) {
 
             if (webwrite) {
                 //pr.waitFor();
                 System.out.println("ok!");
                 System.out.println(line);
-                String[] list1 = line.split(" ");        
-                
+                String[] list1 = line.split(" ");
+
                 alertModel obj = new alertModel();
                 obj.setAlertid(count);
                 obj.setTime(list1[0]);
                 obj.setRid(list1[3].split(":")[1]);
                 obj.setMsg(list1[4]);
                 obj.setPriority(""+list1[7].charAt(0));
-                obj.setProtocol(list1[8].replace("{","" ).replace("}",""));              
+                obj.setProtocol(list1[8].replace("{","" ).replace("}",""));
                 obj.setSrcip(list1[9].split(":")[0]);
                 obj.setSrc_port(list1[9].split(":")[1]);
                 obj.setFlow(list1[10]);
                 obj.setDst_ip(list1[11].split(":")[0]);
                 obj.setDst_port(list1[11].split(":")[1]);
                 System.out.println("Object is "+obj);
-                
+
                 this.repos.save(obj);
                 count++;
-                
-              
-               
+
+
+
             } else {
                 System.out.println(line);
             }
@@ -176,6 +187,6 @@ public class snortStartModel extends UserController {
 	public void setRepos(alertRepo repos) {
 		// TODO Auto-generated method stub
 		this.repos = repos;
-		
+
 	}
 }
