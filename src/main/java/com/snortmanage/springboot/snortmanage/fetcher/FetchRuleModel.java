@@ -22,7 +22,6 @@ public class FetchRuleModel extends UserController {
         in = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
         String line;
         while ((line = in.readLine()) != null) {
-               System.out.println(line);
                if (line.contains("Error")){
                    return line;
                }

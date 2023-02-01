@@ -1,4 +1,3 @@
-
 package com.snortmanage.springboot.snortmanage.usermanager;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,22 +43,21 @@ public class UserController {
         regobj.setOpertatingSystem();
         System.out.println("Finding your Operating System " + regobj.getOperatingSystem());
         repo.save(regobj);
-        String str = regobj.getUsername();
         model.put("userregrepoAckn", "User registered successfully");
-        session.setAttribute("viewer", str);
-        if (str != null) {
-            model.put("regname", "Welcome" + " " + str + " " + "!");
-        }
         return "login.jsp";
     }
 
     @PostMapping(value = "userloginpost")
     public String userlogin(@RequestParam Map<String, String> requestParams, ModelMap model, HttpSession session) {
         logobj = repo.findByusername(requestParams.get("username"));
+        System.out.print(requestParams.get("username"));
         String pass = requestParams.get("password");
         if (BCrypt.checkpw(pass, logobj.getPassword())) {
             logobj.pathSetter();
+            String str = logobj.getUsername();
+            session.setAttribute("viewer", str);
             session.setAttribute("logobj", logobj);
+            model.put("regname", logobj.getUsername());
             return "home.jsp";
         } else {
             model.put("wrongpassword", "Password doesn't match,enter correct password");

@@ -79,3 +79,30 @@ form label{
   width: 80px;
   margin-bottom: 1em;
 }
+ .fixedheader {
+        width: 600px;
+        table-layout: fixed;
+        border-collapse: collapse;
+      }
+      .fixedheader tbody {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        height: 400px;
+      }
+      .fixedheader thead tr {
+        display: block;
+      }
+      .fixedheader thead {
+        background: black;
+        color: #fff;
+      }
+      .fixedheader tr,
+      .fixedheader th,
+      .fixedheader td {
+        text-align: center;
+        padding:5px;
+      }
+      .fixedheader td {
+        border: 1px solid #797878;
+      }
