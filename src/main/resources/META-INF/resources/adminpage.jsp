@@ -104,24 +104,27 @@
 
             const body = document.body,
             tbl = document.createElement('table');
-            tbl.style.width = '300px';
+            tbl.setAttribute("class","fixedheader");
             tbl.style.cssText = 'margin-left:500px; margin-top:100px; padding:30px;'
-            tbl.style.border = '2px solid black';
+            //tbl.style.border = '2px solid black';
             var count = 0;
             const tr1 = tbl.insertRow();
             const td1 = tr1.insertCell();
+            td1.style.Align = 'center';
             td1.appendChild(document.createTextNode("email"));
-            td1.style.border = '1px solid black';
+
             const td2 = tr1.insertCell();
+            td2.style.Align = 'center';
             td2.appendChild(document.createTextNode("username"));
-            td2.style.border = '1px solid black';
+
             const td3 = tr1.insertCell();
+            td3.style.Align = 'center';
             td3.appendChild(document.createTextNode("operating System"));
-            td3.style.border = '1px solid black';
+
             const td4= tr1.insertCell();
             td4.style.Align = 'center';
             td4.appendChild(document.createTextNode("Options"));
-            td4.style.border = '1px solid black';
+
 
             for (let i = 0; i < Rows; i++) {
                const tr = tbl.insertRow();

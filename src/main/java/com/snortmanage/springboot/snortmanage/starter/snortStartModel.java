@@ -1,29 +1,30 @@
 package com.snortmanage.springboot.snortmanage.starter;
 
+import com.snortmanage.springboot.snortmanage.alerts.alertModel;
 import com.snortmanage.springboot.snortmanage.alerts.alertRepo;
 import com.snortmanage.springboot.snortmanage.usermanager.UserController;
 import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Objects;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.snortmanage.springboot.snortmanage.alerts.alertModel;
-import com.snortmanage.springboot.snortmanage.alerts.alertRepo;
-
-import java.io.*;
-import java.lang.*;
 
 //snort compile code: snort -A console -i wlp3s0 -q -c /etc/snort/test_snort.conf
 //snort -A full -l /home/hariprasaath/versions/miniproject_bash -i wlp3s0  -c /etc/snort/test_snort.conf
 public class snortStartModel extends UserController {
-	
-	
-	
+
+
     private String snortMode;
     private String compArg;
 
     private String logMode;
+    private UserModel logobj;
+    private String inface = "wlp3s0";
+    private String confFilePath;
+    private String logFilePath;
+    private String logComp;
+    private alertRepo repos;
 
     public void setLogobj(UserModel logobj) {
         this.logobj = logobj;
@@ -36,15 +37,6 @@ public class snortStartModel extends UserController {
     public void setLogFilePath(String logFilePath) {
         this.logFilePath = logFilePath;
     }
-
-    private UserModel logobj;
-
-    private String inface = "wlp3s0";
-
-    private String confFilePath ;
-    private String logFilePath ;
-
-    private String logComp;
 
     public String getSnortMode() {
         return snortMode;
@@ -66,6 +58,13 @@ public class snortStartModel extends UserController {
         return inface;
     }
 
+    public void setInface(String inface) {
+        if (!Objects.equals(inface, "")) {
+            this.inface = inface;
+        } else {
+            this.inface = "wlp3s0";
+        }
+    }
 
     @Override
     public String toString() {
@@ -79,14 +78,7 @@ public class snortStartModel extends UserController {
                 ", logComp='" + logComp + '\'' +
                 '}';
     }
-
-    public void setInface(String inface) {
-        if (!Objects.equals(inface, "")) {
-            this.inface = inface;
-        } else {
-            this.inface = "wlp3s0";
-        }
-    }
+//hell0
 
     //ProcessBuilder ps = new ProcessBuilder("snort", "-A", "console", "-i", "wlp3s0", "-q", "-c", "/etc/snort/test_snort.conf");
     public String snortStarter() throws IOException, InterruptedException {
@@ -112,10 +104,6 @@ public class snortStartModel extends UserController {
         }
         return alert;
     }
-//hell0
-
-
-	private alertRepo repos;
 
 
     //private alertModel obj;
@@ -123,8 +111,8 @@ public class snortStartModel extends UserController {
     public String idsHandle(boolean webwrite) throws IOException, InterruptedException {
 
 
-
         System.out.println("Staring SNORT IN IDS MODE");
+
         ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", confFilePath);
         ps.redirectErrorStream(true);
         Process pr = ps.start();
@@ -135,7 +123,7 @@ public class snortStartModel extends UserController {
 
             if (webwrite) {
                 //pr.waitFor();
-                System.out.println("ok!");
+
                 System.out.println(line);
                 String[] list1 = line.split(" ");
 
@@ -144,18 +132,17 @@ public class snortStartModel extends UserController {
                 obj.setTime(list1[0]);
                 obj.setRid(list1[3].split(":")[1]);
                 obj.setMsg(list1[4]);
-                obj.setPriority(""+list1[7].charAt(0));
-                obj.setProtocol(list1[8].replace("{","" ).replace("}",""));
+                obj.setPriority("" + list1[7].charAt(0));
+                obj.setProtocol(list1[8].replace("{", "").replace("}", ""));
                 obj.setSrcip(list1[9].split(":")[0]);
                 obj.setSrc_port(list1[9].split(":")[1]);
                 obj.setFlow(list1[10]);
                 obj.setDst_ip(list1[11].split(":")[0]);
                 obj.setDst_port(list1[11].split(":")[1]);
-                System.out.println("Object is "+obj);
+
 
                 this.repos.save(obj);
                 count++;
-
 
 
             } else {
@@ -163,7 +150,7 @@ public class snortStartModel extends UserController {
             }
         }
         //pr.waitFor();
-        System.out.println("ok!");
+
         in.close();
         return null;
     }
@@ -184,9 +171,9 @@ public class snortStartModel extends UserController {
         in.close();
     }
 
-	public void setRepos(alertRepo repos) {
-		// TODO Auto-generated method stub
-		this.repos = repos;
+    public void setRepos(alertRepo repos) {
+        // TODO Auto-generated method stub
+        this.repos = repos;
 
-	}
+    }
 }

@@ -135,12 +135,12 @@ public class SnortRuleConfig extends UserController {
 
     @Override
     public String toString() {
-        return Integer.toString(sid)+','+ protocol + ','+ srcip + ',' + src_port + ',' + dst_ip + ','+ dst_port + ','+ message + ',' + num_pkts;
+        return Integer.toString(sid)+','+ protocol + ','+ srcip + ',' + src_port + ',' + dst_ip + ','+ dst_port + ','+ message + ',' + user;
     }
 
     public String ruleGenerator(){
         //model rule alert tcp any any ->  any any (msg:"DDoS detected ";  flow: stateless; threshold: type both, track by_src, count 3, seconds 8 ; priority: 1; sid:1000003; rev:2)
-        this.rule = "alert "+protocol+" "+srcip+" "+src_port+" <> "+dst_ip+" "+dst_port+" "+"(msg: "+message+";"+" flow: stateless; threshold: type both, track by_dst, count "+num_pkts+", seconds 8 ; priority: 1; sid: "+sid+";"+"rev:1)";
+        this.rule = "alert "+protocol+" "+srcip+" "+src_port+" <> "+dst_ip+" "+dst_port+" "+"(msg: "+message+";"+ " priority: 1; sid: "+sid+";"+"rev:1)";
         return rule;
     }
 
