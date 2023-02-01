@@ -1,25 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Snort starter</title>
     <link href="style1.css" rel="stylesheet">
 </head>
-<body>
-<div>
-    <div>
-         <body>
-               <nav>
-                <a href="home"><img class='zoom' src="snortlogo.jpg" align="left" width=150 height=80></img></a>
-                <label class="logo">SNORT Homepage</label>
-                <ul>
-                	<li><p>${regname}</p></li>
-                    <li><a href="rulegen">Generate snort rule</a></li>
-                    <li><a href='/rulefetch'>View snort rule</a></li>
-                    <li><a href='/snortstart'>starting snort</a></li>
-                </ul>
-               </nav>
-</div>
+<nav>
+    <a href="home"><img class='zoom' src="snortlogo.jpg" align="left" width=150 height=80></img></a>
+    <label class="logo">SNORT Homepage</label>
+    <ul>
+        <li><p>${regname}</p></li>
+        <li><a href="rulegen">Generate snort rule</a></li>
+        <li><a href='/rulefetch'>View snort rule</a></li>
+        <li><a href='/snortstart'>starting snort</a></li>
+    </ul>
+</nav>
 <div>
     <form  align="center" action="/start" method="POST">
         <label for="snortmode">Choose a mode:</label>
@@ -33,15 +28,20 @@
             <option value="alerttoweb">alert to web</option>
             <option value="alerttoconsole">alert to console</option>
         </select>
-        <label for="network-interface">Enter interface to monitor</label>
+        <label for="inface">Enter interface to monitor</label>
         <select id="inface" name="inface"><option value="">Please select</option></select>
 
         <input class="fsty" type="submit" value="Start the snort">
     </form>
+    <form action = "/searchAlert" method = "POST">
+        <label for = "searchTerm">Search Term:</label>
+        <input type="Text" id="searchTerm" name = "var1">
+        <input type="submit" value="Search alerts">
+    </form>
+    <div id = "alerts"></div>
     <script >
             var data = "${networkinterface}";
             var Rows = "${rows}";
-
             var infacelist =  data.split(",");
 
             var selectElement = document.getElementById('inface');
@@ -49,11 +49,6 @@
                 console.log(infacelist[i]);
                 selectElement.add(new Option(infacelist[i]));
             }
-        </script>
-    <p align="center" class='alert'>${AlertMessage}</p>
-</div>
-	<script>
-
 		var data1 = "${data}";
 		console.log(data1);
 		var list1 = data1.split("alertModel")
@@ -69,6 +64,7 @@
 			divElement.appendChild(breakElement);
 		}
 	</script>
-
+    <p align="center" class='alert'>${AlertMessage}</p>
+</div>
 </body>
 </html>

@@ -38,6 +38,7 @@ public class snortRuleController {
         UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
         robj = obj;
         robj.setLogobj(logobj);
+        robj.setUser(logobj.getUsername());
         robj.setSid(sid += 1);
         String drule = robj.ruleGenerator();
         model.put("generatedrule", "The generated rule is: " + drule);

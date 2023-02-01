@@ -156,7 +156,7 @@ public class fetchController{
     }
     @PostMapping("/url")
     public ModelAndView saveToDatabase(@RequestBody Map<String, String> data) {
-        System.out.println("accepted from .............");
+
         System.out.println("rid from script" + data);
         System.out.println(data.get("rid"));
         System.out.println(data.get("protocol"));
@@ -187,7 +187,8 @@ public class fetchController{
 
     @PostMapping("/url2")
     public ModelAndView deleteFromDatabase(@RequestBody Map<String, String> data) {
-        System.out.println("accepted from url2.............");
+
+
         System.out.println("rid from script" + data);
         System.out.println(data.get("rid"));
 

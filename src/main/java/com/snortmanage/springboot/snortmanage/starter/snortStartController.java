@@ -30,6 +30,7 @@ public class snortStartController {
 
     @GetMapping(value="/snortstart")
     public  String snortStartPage(ModelMap model,HttpServletRequest request) throws SocketException {
+        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
         Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
         List<String> list = new ArrayList<>();
         for (NetworkInterface netint : Collections.list(nets))
@@ -45,13 +46,17 @@ public class snortStartController {
     @PostMapping(value={"/start","/snortstar"})
     public String snortStarter(snortStartModel obj, ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
         UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
-
-        @PostMapping(value={"/start","/snortstar"})
-    public String snortStarter(snortStartModel obj, ModelMap model) throws IOException, InterruptedException {
         String alert = "";
         obj.setLogobj(logobj);
+        obj.setConfFilePath(logobj.getConfFilePath());
+        obj.setLogFilePath(logobj.getLogFilePath());
         obj.setRepos(repos);
-        System.out.println(obj);
+        if(obj.getInface().contains("[")){
+            obj.setInface(obj.getInface().replace("[",""));
+
+        }else if(obj.getInface().contains("]")){
+            obj.setInface(obj.getInface().replace("]",""));
+        }
         alert = obj.snortStarter();
         model.put("AlertMessage",alert);
         return "snortstart.jsp";

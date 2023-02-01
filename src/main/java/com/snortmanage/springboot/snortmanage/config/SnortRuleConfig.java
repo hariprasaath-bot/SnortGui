@@ -23,6 +23,7 @@ public class SnortRuleConfig extends UserController {
     private String dst_port;
     private String message;
     private String num_pkts;
+    private String user;
 
 
     public void setSid(int sid) {
@@ -41,6 +42,7 @@ public class SnortRuleConfig extends UserController {
     @Transient
     private UserModel logobj;
     public String getProtocol() {
+
         return protocol;
     }
 
@@ -53,6 +55,7 @@ public class SnortRuleConfig extends UserController {
     }
 
     public String getSrcip() {
+
         return srcip;
     }
 
@@ -65,6 +68,14 @@ public class SnortRuleConfig extends UserController {
     }
     public void setLogobj(UserModel logobj) {
         this.logobj = logobj;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
 
@@ -138,7 +149,7 @@ public class SnortRuleConfig extends UserController {
         try {
 
 
-            FileWriter fWriter = new FileWriter("C:\\Snort\\rules\\local.rules",true);
+            FileWriter fWriter = new FileWriter(logobj.getRuleFilePath(),true);
 
             FileWriter fWriter1 = new FileWriter(logobj.getRuleFilePath(),true);
             BufferedWriter br = new BufferedWriter(fWriter1);
