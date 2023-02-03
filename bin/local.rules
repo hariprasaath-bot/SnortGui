@@ -1,0 +1,13 @@
+
+alert tcp any 1883 -> any 200 (msg: hi; flow: stateless; threshold: type both, track by_src, count 600, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp any 1883 -> any 200 (msg: hi; flow: stateless; threshold: type both, track by_src, count 600, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp any 1883 -> any 200 (msg: hi; flow: stateless; threshold: type both, track by_src, count 600, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp 192.168.54.20 1883 -> 62 52 (msg: 546; flow: stateless; threshold: type both, track by_src, count 63, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp 622 80 -> 633 140 (msg: 200; flow: stateless; threshold: type both, track by_src, count 60, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert 312 655 51 -> 6516 561 (msg: 651; flow: stateless; threshold: type both, track by_src, count 51, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp 192.168.54.20 1883 -> 62 140 (msg: 200; flow: stateless; threshold: type both, track by_src, count 51, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp 192.168.3.3 1883 -> any 1852 (msg: hello; flow: stateless; threshold: type both, track by_src, count 5000, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp 192.168.3.32 1883 -> any 1852 (msg: hello; flow: stateless; threshold: type both, track by_src, count 5000, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp 262 6262 -> 626+ 262 (msg: 62+6; flow: stateless; threshold: type both, track by_src, count +2+, seconds 8 ; priority: 1; sid:1000003; rev:1)
+alert tcp 192.168.3.3 1883 -> 192.168.5.3 1852 (msg: hello; flow: stateless; threshold: type both, track by_src, count 5000, seconds 8 ; priority: 1; sid:100001 rev:1)
+alert udp 192.168.25.20 80 -> 192.168.25.68 22 (msg: coma; flow: stateless; threshold: type both, track by_src, count 20, seconds 8 ; priority: 1; sid:100002 rev:1)

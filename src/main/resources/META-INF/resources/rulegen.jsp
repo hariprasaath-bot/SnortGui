@@ -11,7 +11,12 @@
         <a href="home"><img class='zoom' src="snortlogo.jpg" align="left" width=150 height=80></img></a>
         <label class="logo">SNORT RULE GENERATOR</label>
         <ul>
-        	<li><p>${regname}</p></li>
+        	<div class="dropdown">
+    		<button class="dropbtn">${regname}<i class="fa fa-caret-down"></i></button>
+    		<div class="dropdown-content">
+      			<a href="logout">logout</a>
+    		</div>
+  			</div> 
             <li><a href="rulegen">Generate snort rule</a></li>
             <li><a href='rulefetch'>View snort rule</a></li>
             <li><a href='snortstart'>starting snort</a></li>

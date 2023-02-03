@@ -258,12 +258,7 @@
         <a href="home"><img align="left" class='zoom' height=80 src="snortlogo.jpg" width=150></img></a>
         <label class="logo">SNORT RULE MANAGE</label>
         <ul>
-            <div class="dropdown">
-    		<button class="dropbtn">${regname}<i class="fa fa-caret-down"></i></button>
-    		<div class="dropdown-content">
-      			<a href="logout">logout</a>
-    		</div>
-  			</div> 
+            <li><p>${regname}</p></li>
             <li><a href="rulegen">Generate snort rule</a></li>
             <li><a href='/rulefetch'>View snort rule</a></li>
             <li><a href='/snortstart'>starting snort</a></li>

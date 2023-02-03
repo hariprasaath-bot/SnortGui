@@ -28,14 +28,47 @@ public class UserController {
     public String login() {
         return "login.jsp";
     }
+    @GetMapping(value = {"logout", ""})
+    public String logout(HttpSession session) {
+    	session.setAttribute("viewer", null);
+        return "login.jsp";
+    }
+    @GetMapping(value = {"changepass", ""})
+    public String changepass(ModelMap model,HttpServletRequest request) {
+    	String uname = (String) request.getSession().getAttribute("viewer");
+    	model.put("userinfo","Hello"+" "+uname+". "+"enter the following to change password.");
+        return "password.jsp";
+    }
+    @PostMapping(value = {"newpass",""})
+    public String newpass(@RequestParam Map<String, String> requestParams, ModelMap model, HttpSession session,HttpServletRequest request) {
+    	String uname = (String) request.getSession().getAttribute("viewer");
+    	logobj = repo.findByusername(uname);
+        String currentpass = requestParams.get("currentpass");
+        String newpass = requestParams.get("newpass");
+        if (BCrypt.checkpw(currentpass, logobj.getPassword())) {
+            logobj.pathSetter();
+            logobj.setPassword(newpass);
+            repo.save(logobj);
+            model.put("newpassack","Your password has been changed.");
+        	return "password.jsp";
+        } else {
+            model.put("wrongpass", "Password doesn't match,enter correct password");
+            return "password.jsp";
+        }
+    	
+    }
+    
 
     @GetMapping(value = {"home", ""})
     public String home(ModelMap model, HttpServletRequest request) {
         String uname = (String) request.getSession().getAttribute("viewer");
         if (uname != null) {
             model.put("regname", "Welcome" + " " + uname + " " + "!");
+            return "home.jsp";
         }
-        return "home.jsp";
+        else{
+        	return "login.jsp";
+        }
     }
 
     @PostMapping(value = "userregpost")
@@ -50,14 +83,13 @@ public class UserController {
     @PostMapping(value = "userloginpost")
     public String userlogin(@RequestParam Map<String, String> requestParams, ModelMap model, HttpSession session) {
         logobj = repo.findByusername(requestParams.get("username"));
-        System.out.print(requestParams.get("username"));
         String pass = requestParams.get("password");
         if (BCrypt.checkpw(pass, logobj.getPassword())) {
             logobj.pathSetter();
             String str = logobj.getUsername();
             session.setAttribute("viewer", str);
             session.setAttribute("logobj", logobj);
-            model.put("regname", logobj.getUsername());
+            model.put("regname", "welcome"+" "+logobj.getUsername()+" "+"!");
             return "home.jsp";
         } else {
             model.put("wrongpassword", "Password doesn't match,enter correct password");
