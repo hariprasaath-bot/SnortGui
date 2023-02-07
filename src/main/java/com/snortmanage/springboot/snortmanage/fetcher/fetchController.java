@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.snortmanage.springboot.snortmanage.config.SnortRuleConfig;
+import com.snortmanage.springboot.snortmanage.config.rule;
 
 import com.snortmanage.springboot.snortmanage.usermanager.user;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,13 +67,14 @@ public class fetchController{
 
     @CrossOrigin
     @PostMapping("/fetchrule")
-    public ResponseEntity<List> fetchdis(@RequestParam("search term") String search, ModelMap model) {
+    public ResponseEntity<List<rule>> fetchdis(@RequestBody String search, ModelMap model) {
         System.out.println("Your query is  " + search);
         //ModelAndView mv = new ModelAndView();
-        List<SnortRuleConfig> rules;
+        List<rule> rules;
 
         if (search.matches("[a-zA-Z]+")) {                  //Search for protocol
             rules = repo.findByprotocol(search);
+            System.out.println("here: "+ rules);
             if (rules.isEmpty()) {
                 System.out.println(search + " NO match found");
                 return new ResponseEntity<>(rules, HttpStatus.BAD_REQUEST);
@@ -87,7 +88,7 @@ public class fetchController{
                 return new ResponseEntity<>(rules, HttpStatus.OK);
             }
         } else if (isNumeric(search)) {                             //Search for rule sid
-            rules = (List<SnortRuleConfig>) repo.findById(Integer.valueOf(search)).orElse(new SnortRuleConfig());
+            rules = (List<rule>) repo.findById(Integer.valueOf(search)).orElse(new rule());
             if (rules.equals(null)) {
                 System.out.println(search + " NO match found");
                 return new ResponseEntity<>(rules, HttpStatus.BAD_REQUEST);
@@ -122,7 +123,7 @@ public class fetchController{
     public ModelAndView saveToFile(HttpServletRequest request) {
         user logobj = (user) request.getSession().getAttribute("logobj");
 
-        List<SnortRuleConfig> data = new ArrayList<SnortRuleConfig>();
+        List<rule> data = new ArrayList<rule>();
         repo.findAll().forEach(rule -> data.add(rule));
         try {
             File myObj = new File(logobj.getRuleFilePath());
@@ -164,7 +165,7 @@ public class fetchController{
         System.out.println(data.get("sip"));
 
         //Creating a new record for each save
-        SnortRuleConfig newRecord = new SnortRuleConfig();
+        rule newRecord = new rule();
         newRecord.setSid(Integer.parseInt(data.get("rid")));
         newRecord.setProtocol(data.get("protocol"));
         newRecord.setSrcip(data.get("sip"));

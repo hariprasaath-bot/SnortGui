@@ -17,7 +17,7 @@ import java.io.IOException;
 public class snortRuleController {
 
     private int sid = 100000;
-    private SnortRuleConfig robj;
+    private rule robj;
     @Autowired
     private SnortRuleRepo repo;
 
@@ -31,7 +31,7 @@ public class snortRuleController {
     }
 
     @PostMapping(value = {"rulepost", "rulegen"})
-    public String snortGenHandle(SnortRuleConfig obj, ModelMap model, HttpServletRequest request) throws IOException {
+    public String snortGenHandle(rule obj, ModelMap model, HttpServletRequest request) throws IOException {
         user logobj = (user) request.getSession().getAttribute("logobj");
         robj = obj;
         robj.setLogobj(logobj);
