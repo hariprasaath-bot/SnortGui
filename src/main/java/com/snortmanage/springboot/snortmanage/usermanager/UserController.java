@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -85,8 +82,9 @@ public class UserController {
         return new ResponseEntity<String>(result, HttpStatus.CREATED);
     }
 
+    @CrossOrigin
     @PostMapping(value = "userloginpost")
-    public Boolean userlogin(@RequestBody Map<String, String> requestParams, ModelMap model, HttpSession session) {
+    public ResponseEntity<String> userlogin(@RequestBody Map<String, String> requestParams, ModelMap model, HttpSession session) {
         System.out.println(requestParams);
         logobj = repo.findByusername(requestParams.get("username"));
         String pass = requestParams.get("password");
@@ -96,10 +94,12 @@ public class UserController {
             session.setAttribute("viewer", str);
             session.setAttribute("logobj", logobj);
             model.put("regname", "welcome"+" "+logobj.getUsername()+" "+"!");
-            return true;
+            String result = "success";
+            return new ResponseEntity<>(result,HttpStatus.OK);
         } else {
             model.put("wrongpassword", "Password doesn't match,enter correct password");
-            return false;
+            String result = "fail";
+            return new ResponseEntity<>(result,HttpStatus.FORBIDDEN);
         }
     }
 

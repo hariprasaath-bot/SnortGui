@@ -16,13 +16,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -67,17 +65,18 @@ public class fetchController{
         return m.matches();
     }
 
+    @CrossOrigin
     @PostMapping("/fetchrule")
-    public String fetchdis(@RequestParam("search term") String search, ModelMap model) {
+    public ResponseEntity<List> fetchdis(@RequestParam("search term") String search, ModelMap model) {
         System.out.println("Your query is  " + search);
         //ModelAndView mv = new ModelAndView();
-
+        List<SnortRuleConfig> rules;
 
         if (search.matches("[a-zA-Z]+")) {                  //Search for protocol
-            List<SnortRuleConfig> rules = repo.findByprotocol(search);
+            rules = repo.findByprotocol(search);
             if (rules.isEmpty()) {
                 System.out.println(search + " NO match found");
-                model.put("noRule","NO match found");
+                return new ResponseEntity<>(rules, HttpStatus.BAD_REQUEST);
             } else {
                 int noOfRules = rules.size();
                 model.put("rows", noOfRules);
@@ -85,25 +84,27 @@ public class fetchController{
                 System.out.println(rules);
                 String scriptdata = "onerror='tableCreate()'";
                 model.put("functioncall", scriptdata);
+                return new ResponseEntity<>(rules, HttpStatus.OK);
             }
         } else if (isNumeric(search)) {                             //Search for rule sid
-            SnortRuleConfig rule = repo.findById(Integer.valueOf(search)).orElse(new SnortRuleConfig());
-            if (rule.equals(null)) {
+            rules = (List<SnortRuleConfig>) repo.findById(Integer.valueOf(search)).orElse(new SnortRuleConfig());
+            if (rules.equals(null)) {
                 System.out.println(search + " NO match found");
-                model.put("noRule","NO match found");
+                return new ResponseEntity<>(rules, HttpStatus.BAD_REQUEST);
             }else {
                 int noOfRules = 1;              //Always one -- unique sid
                 model.put("rows", noOfRules);
-                model.put("rules", rule);
-                System.out.println(rule);
+                model.put("rules", rules);
+                System.out.println(rules);
                 String scriptdata = "onerror='tableCreate()'";
                 model.put("functioncall", scriptdata);
+                return new ResponseEntity<>(rules, HttpStatus.OK);
             }
         } else if (isValidIPAddress(search)) {                      //search for IP ADDRESS
-            List<SnortRuleConfig> rules = repo.findBysrcip(search);
+            rules = repo.findBysrcip(search);
             if (rules.isEmpty()) {
                 System.out.println(search + " NO match found");
-                model.put("noRule","NO match found");
+                return new ResponseEntity<>(rules, HttpStatus.BAD_REQUEST);
             } else {
                 int noOfRules = rules.size();
                 model.put("rows", noOfRules);
@@ -111,9 +112,10 @@ public class fetchController{
                 System.out.println(rules);
                 String scriptdata = "onerror='tableCreate()'";
                 model.put("functioncall", scriptdata);
+                return new ResponseEntity<>(rules, HttpStatus.OK);
             }
         }
-        return "view.jsp";
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping("/saveToFile")
