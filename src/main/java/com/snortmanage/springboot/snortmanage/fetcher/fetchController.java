@@ -11,8 +11,7 @@ import java.util.Map;
 
 import com.snortmanage.springboot.snortmanage.config.SnortRuleConfig;
 
-import com.snortmanage.springboot.snortmanage.usermanager.UserController;
-import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
+import com.snortmanage.springboot.snortmanage.usermanager.user;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -119,7 +118,7 @@ public class fetchController{
 
     @RequestMapping("/saveToFile")
     public ModelAndView saveToFile(HttpServletRequest request) {
-        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+        user logobj = (user) request.getSession().getAttribute("logobj");
 
         List<SnortRuleConfig> data = new ArrayList<SnortRuleConfig>();
         repo.findAll().forEach(rule -> data.add(rule));
@@ -203,7 +202,7 @@ public class fetchController{
 
     @PostMapping("/validate")
     public String ruleValidate(ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
-        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+        user logobj = (user) request.getSession().getAttribute("logobj");
         FetchRuleModel obj = new FetchRuleModel();
         obj.setLogobj(logobj);
         String validator = obj.ruleValidation();
@@ -213,7 +212,7 @@ public class fetchController{
 
     @PostMapping("/deletefile")
     public String ruleFileDelete(ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
-        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+        user logobj = (user) request.getSession().getAttribute("logobj");
         FetchRuleModel obj = new FetchRuleModel();
         obj.setLogobj(logobj);
         String validator = obj.ruleFileDelete();

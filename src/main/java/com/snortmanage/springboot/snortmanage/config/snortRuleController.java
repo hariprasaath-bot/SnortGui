@@ -1,18 +1,15 @@
 package com.snortmanage.springboot.snortmanage.config;
 
-import com.snortmanage.springboot.snortmanage.config.SnortRuleConfig;
 import com.snortmanage.springboot.snortmanage.fetcher.SnortRuleRepo;
 
-import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
+import com.snortmanage.springboot.snortmanage.usermanager.user;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 
@@ -35,7 +32,7 @@ public class snortRuleController {
 
     @PostMapping(value = {"rulepost", "rulegen"})
     public String snortGenHandle(SnortRuleConfig obj, ModelMap model, HttpServletRequest request) throws IOException {
-        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+        user logobj = (user) request.getSession().getAttribute("logobj");
         robj = obj;
         robj.setLogobj(logobj);
         robj.setUser(logobj.getUsername());

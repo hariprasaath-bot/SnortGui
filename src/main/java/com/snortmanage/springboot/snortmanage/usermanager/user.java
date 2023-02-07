@@ -1,12 +1,10 @@
 package com.snortmanage.springboot.snortmanage.usermanager;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
-public class UserModel {
+public class user {
     @Transient
     private static OS os = null;
 
@@ -33,6 +31,8 @@ public class UserModel {
     @Transient
     private String ruleFilePath;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String email;
     private String username;
     private String password;

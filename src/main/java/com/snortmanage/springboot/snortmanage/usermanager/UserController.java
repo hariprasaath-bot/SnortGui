@@ -4,10 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
@@ -15,7 +18,7 @@ import java.util.Map;
 @Controller
 public class UserController {
 
-    public UserModel logobj;
+    public user logobj;
     @Autowired
     private UserRegRepo repo;
 
@@ -72,16 +75,19 @@ public class UserController {
     }
 
     @PostMapping(value = "userregpost")
-    public String userreg(UserModel regobj, HttpSession session, ModelMap model) {
+
+    public ResponseEntity<String> userreg(@RequestBody user regobj, HttpSession session, ModelMap model) {
         regobj.setOpertatingSystem();
         System.out.println("Finding your Operating System " + regobj.getOperatingSystem());
         repo.save(regobj);
         model.put("userregrepoAckn", "User registered successfully");
-        return "login.jsp";
+        String result = "success";
+        return new ResponseEntity<String>(result, HttpStatus.CREATED);
     }
 
     @PostMapping(value = "userloginpost")
-    public String userlogin(@RequestParam Map<String, String> requestParams, ModelMap model, HttpSession session) {
+    public Boolean userlogin(@RequestBody Map<String, String> requestParams, ModelMap model, HttpSession session) {
+        System.out.println(requestParams);
         logobj = repo.findByusername(requestParams.get("username"));
         String pass = requestParams.get("password");
         if (BCrypt.checkpw(pass, logobj.getPassword())) {
@@ -90,10 +96,10 @@ public class UserController {
             session.setAttribute("viewer", str);
             session.setAttribute("logobj", logobj);
             model.put("regname", "welcome"+" "+logobj.getUsername()+" "+"!");
-            return "home.jsp";
+            return true;
         } else {
             model.put("wrongpassword", "Password doesn't match,enter correct password");
-            return "login.jsp";
+            return false;
         }
     }
 

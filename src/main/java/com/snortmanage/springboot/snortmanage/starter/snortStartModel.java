@@ -3,7 +3,7 @@ package com.snortmanage.springboot.snortmanage.starter;
 import com.snortmanage.springboot.snortmanage.alerts.alertModel;
 import com.snortmanage.springboot.snortmanage.alerts.alertRepo;
 import com.snortmanage.springboot.snortmanage.usermanager.UserController;
-import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
+import com.snortmanage.springboot.snortmanage.usermanager.user;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,14 +19,14 @@ public class snortStartModel extends UserController {
     private String compArg;
 
     private String logMode;
-    private UserModel logobj;
+    private user logobj;
     private String inface = "wlp3s0";
     private String confFilePath;
     private String logFilePath;
     private String logComp;
     private alertRepo repos;
 
-    public void setLogobj(UserModel logobj) {
+    public void setLogobj(user logobj) {
         this.logobj = logobj;
     }
 

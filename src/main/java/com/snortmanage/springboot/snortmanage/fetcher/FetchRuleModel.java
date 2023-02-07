@@ -1,7 +1,7 @@
 package com.snortmanage.springboot.snortmanage.fetcher;
 
 import com.snortmanage.springboot.snortmanage.usermanager.UserController;
-import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
+import com.snortmanage.springboot.snortmanage.usermanager.user;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 public class FetchRuleModel extends UserController {
 
-    private UserModel logobj;
+    private user logobj;
 
     public String ruleValidation() throws IOException, InterruptedException {
 
@@ -40,7 +40,7 @@ public class FetchRuleModel extends UserController {
         return  "File deleted successfully";
     }
 
-    public void setLogobj(UserModel logobj) {
+    public void setLogobj(user logobj) {
         this.logobj = logobj;
     }
 }

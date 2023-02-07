@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 
-public interface UserRegRepo extends CrudRepository <UserModel,String>{
-	UserModel findByusername(String var);
+public interface UserRegRepo extends CrudRepository <user,String>{
+	user findByusername(String var);
 
-    List<UserModel> findByemail(String search);
+    List<user> findByemail(String search);
 
-    List<UserModel> findByoperatingSystem(String search);
+    List<user> findByoperatingSystem(String search);
 }

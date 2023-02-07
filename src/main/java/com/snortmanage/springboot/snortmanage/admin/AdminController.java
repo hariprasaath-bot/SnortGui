@@ -1,7 +1,7 @@
 package com.snortmanage.springboot.snortmanage.admin;
 
 import com.snortmanage.springboot.snortmanage.fetcher.SnortRuleRepo;
-import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
+import com.snortmanage.springboot.snortmanage.usermanager.user;
 import com.snortmanage.springboot.snortmanage.usermanager.UserRegRepo;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class AdminController {
         System.out.println("USER TABLE: Your query is  " + search);
 
         if (search.contains("@.com")) {                  //Search for protocol
-            List<UserModel> users = repo.findByemail(search);
+            List<user> users = repo.findByemail(search);
             if (users.isEmpty()) {
                 System.out.println(search + " NO match found");
                 model.put("noRule", "NO match found");
@@ -55,7 +55,7 @@ public class AdminController {
                 model.put("functioncall", scriptdata);
             }
         } else if (search.toLowerCase().contains("linux") || search.toLowerCase().contains("windows")) {                             //Search for rule sid
-            List<UserModel> users = repo.findByoperatingSystem(search);
+            List<user> users = repo.findByoperatingSystem(search);
             if (users.isEmpty()) {
                 System.out.println(search + " NO match found");
                 model.put("noRule", "NO match found");
@@ -73,7 +73,7 @@ public class AdminController {
     @PostMapping("/viewall")
     public String userdata(ModelMap model) {
 
-        List<UserModel> data = new ArrayList<UserModel>();
+        List<user> data = new ArrayList<user>();
         repo.findAll().forEach(user -> data.add(user));
         if (data.isEmpty()) {
             model.put("noRule", "NO match found");
@@ -96,7 +96,7 @@ public class AdminController {
 
         System.out.print(user);
         //Creating a new record for each save
-        UserModel newRecord = new UserModel();
+        com.snortmanage.springboot.snortmanage.usermanager.user newRecord = new user();
         newRecord.setEmail((user.get("email")));
         newRecord.setOperatingSystem(user.get("operatingsystem"));
         newRecord.setPassword("root");

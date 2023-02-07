@@ -1,8 +1,7 @@
 package com.snortmanage.springboot.snortmanage.starter;
 
 import com.snortmanage.springboot.snortmanage.alerts.alertRepo;
-import com.snortmanage.springboot.snortmanage.usermanager.UserController;
-import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
+import com.snortmanage.springboot.snortmanage.usermanager.user;
 import com.snortmanage.springboot.snortmanage.alerts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
 
 @Controller
 public class snortStartController {
@@ -30,7 +28,7 @@ public class snortStartController {
 
     @GetMapping(value="/snortstart")
     public  String snortStartPage(ModelMap model,HttpServletRequest request) throws SocketException {
-        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+        user logobj = (user) request.getSession().getAttribute("logobj");
         Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
         List<String> list = new ArrayList<>();
         for (NetworkInterface netint : Collections.list(nets))
@@ -45,7 +43,7 @@ public class snortStartController {
     }
     @PostMapping(value={"/start","/snortstar"})
     public String snortStarter(snortStartModel obj, ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
-        UserModel logobj = (UserModel) request.getSession().getAttribute("logobj");
+        user logobj = (user) request.getSession().getAttribute("logobj");
         String alert = "";
         obj.setLogobj(logobj);
         obj.setConfFilePath(logobj.getConfFilePath());

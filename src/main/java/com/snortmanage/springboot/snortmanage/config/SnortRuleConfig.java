@@ -1,11 +1,9 @@
 package com.snortmanage.springboot.snortmanage.config;
 
 import com.snortmanage.springboot.snortmanage.usermanager.UserController;
-import com.snortmanage.springboot.snortmanage.usermanager.UserModel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
-import jdk.jfr.Enabled;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -35,12 +33,12 @@ public class SnortRuleConfig extends UserController {
     @Transient
     private  String rule;
 
-    public UserModel getLogobj() {
+    public com.snortmanage.springboot.snortmanage.usermanager.user getLogobj() {
         return logobj;
     }
 
     @Transient
-    private UserModel logobj;
+    private com.snortmanage.springboot.snortmanage.usermanager.user logobj;
     public String getProtocol() {
 
         return protocol;
@@ -66,7 +64,7 @@ public class SnortRuleConfig extends UserController {
             this.srcip = "any";
         }
     }
-    public void setLogobj(UserModel logobj) {
+    public void setLogobj(com.snortmanage.springboot.snortmanage.usermanager.user logobj) {
         this.logobj = logobj;
     }
 
