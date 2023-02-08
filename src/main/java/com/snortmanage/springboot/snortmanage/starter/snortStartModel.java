@@ -94,11 +94,13 @@ public class snortStartModel extends UserController {
             logComp = "console";
 
         }
-        if (Objects.equals(logMode, "alerttoconsole")) {
+        if (Objects.equals(logMode, "Alert To Console")) {
             alert = idsHandle(false);
+            System.out.println("From snortStarter -if:"+alert);
             return alert;
-        } else if (Objects.equals(logMode, "alerttoweb")) {
+        } else if (Objects.equals(logMode, "Alert To Web")) {
             System.out.println("IDS MODE WITH ALERT TO WEB");
+            System.out.println("From snortStarter -elseif:"+alert);
             alert = idsHandle(true);
             return alert;
         }
@@ -112,8 +114,8 @@ public class snortStartModel extends UserController {
 
 
         System.out.println("Staring SNORT IN IDS MODE");
-
-        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", confFilePath);
+        String inface1 = ""+inface.charAt(4);
+        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface1, "-q", "-c", confFilePath);
         ps.redirectErrorStream(true);
         Process pr = ps.start();
         BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));

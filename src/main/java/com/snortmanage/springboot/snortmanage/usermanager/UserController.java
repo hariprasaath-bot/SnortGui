@@ -91,6 +91,7 @@ public class UserController {
         if (BCrypt.checkpw(pass, logobj.getPassword())) {
             logobj.pathSetter();
             String str = logobj.getUsername();
+            System.out.println(logobj);
             session.setAttribute("viewer", str);
             session.setAttribute("logobj", logobj);
             model.put("regname", "welcome"+" "+logobj.getUsername()+" "+"!");

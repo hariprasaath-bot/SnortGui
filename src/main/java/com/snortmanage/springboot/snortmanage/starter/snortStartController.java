@@ -6,11 +6,14 @@ import com.snortmanage.springboot.snortmanage.alerts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,26 +28,37 @@ public class snortStartController {
 
 	@Autowired
 	private alertRepo repos;
-
-    @GetMapping(value="/snortstart")
-    public  String snortStartPage(ModelMap model,HttpServletRequest request) throws SocketException {
+	
+	@CrossOrigin
+    @GetMapping("/getinterface")
+	@ResponseBody
+    public  List<String> snortStartPage(HttpServletRequest request) throws SocketException {
+    	System.out.println("called");
         user logobj = (user) request.getSession().getAttribute("logobj");
+    	System.out.println(logobj);
+
         Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-        List<String> list = new ArrayList<>();
-        for (NetworkInterface netint : Collections.list(nets))
-            list.add(displayInterfaceInformation(netint));
-        model.put("networkinterface",list);
+        List<String> list1 = new ArrayList<>();
+        for (NetworkInterface netint : Collections.list(nets)) {
+        	
+            list1.add(displayInterfaceInformation(netint));}
+        /*model.put("networkinterface",list);
         model.put("rows",list.size());
     	String uname=(String)request.getSession().getAttribute("viewer");
     	if(uname!=null) {
-        	model.put("regname", "Welcome" + " " + uname + " " + "!");	
-        }
-    	return "snortstart.jsp";
+        	model.put("regname", "Welcome" + " " + uname + " " + "!");}	
+        */
+        
+    	return list1;
     }
-    @PostMapping(value={"/start","/snortstar"})
+	@CrossOrigin
+    @PostMapping("/startSnort")
+    @ResponseBody
     public String snortStarter(snortStartModel obj, ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
-        user logobj = (user) request.getSession().getAttribute("logobj");
+               
+		user logobj = (user) request.getSession().getAttribute("logobj");
         String alert = "";
+        System.out.print(logobj);
         obj.setLogobj(logobj);
         obj.setConfFilePath(logobj.getConfFilePath());
         obj.setLogFilePath(logobj.getLogFilePath());
@@ -57,7 +71,7 @@ public class snortStartController {
         }
         alert = obj.snortStarter();
         model.put("AlertMessage",alert);
-        return "snortstart.jsp";
+        return alert;
     }
     public static boolean isNumeric(String strNum) {
         try {
