@@ -67,8 +67,10 @@ public class fetchController{
 
     @CrossOrigin
     @PostMapping("/fetchrule")
-    public ResponseEntity<List<rule>> fetchdis(@RequestBody String search, ModelMap model) {
+    public ResponseEntity<List<rule>> fetchdis(@RequestBody String search, ModelMap model,HttpServletRequest request) {
         System.out.println("Your query is  " + search);
+        user logobj = (user) request.getSession().getAttribute("logobj");
+        System.out.println(logobj);
         //ModelAndView mv = new ModelAndView();
         List<rule> rules;
 

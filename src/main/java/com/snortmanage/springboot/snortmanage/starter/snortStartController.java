@@ -1,16 +1,15 @@
 package com.snortmanage.springboot.snortmanage.starter;
 
 import com.snortmanage.springboot.snortmanage.alerts.alertRepo;
+import com.snortmanage.springboot.snortmanage.config.rule;
 import com.snortmanage.springboot.snortmanage.usermanager.user;
 import com.snortmanage.springboot.snortmanage.alerts.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -35,7 +34,7 @@ public class snortStartController {
     public  List<String> snortStartPage(HttpServletRequest request) throws SocketException {
     	System.out.println("called");
         user logobj = (user) request.getSession().getAttribute("logobj");
-    	System.out.println(logobj);
+    	System.out.println("ayya:"+logobj);
 
         Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
         List<String> list1 = new ArrayList<>();
@@ -54,21 +53,23 @@ public class snortStartController {
 	@CrossOrigin
     @PostMapping("/startSnort")
     @ResponseBody
-    public String snortStarter(snortStartModel obj, ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
+    public String snortStarter(@RequestBody snortStartModel obj, ModelMap model, HttpServletRequest request) throws IOException, InterruptedException {
                
 		user logobj = (user) request.getSession().getAttribute("logobj");
         String alert = "";
-        System.out.print(logobj);
+        System.out.println(logobj);
         obj.setLogobj(logobj);
         obj.setConfFilePath(logobj.getConfFilePath());
         obj.setLogFilePath(logobj.getLogFilePath());
         obj.setRepos(repos);
+
         if(obj.getInface().contains("[")){
             obj.setInface(obj.getInface().replace("[",""));
 
         }else if(obj.getInface().contains("]")){
             obj.setInface(obj.getInface().replace("]",""));
         }
+        System.out.println(obj);
         alert = obj.snortStarter();
         model.put("AlertMessage",alert);
         return alert;
@@ -81,32 +82,41 @@ public class snortStartController {
         }
         return true;
     }
+
+    @CrossOrigin
     @PostMapping("/searchAlert")
-    public String searchAlert(@RequestParam("var1") String var, ModelMap model)
+    public ResponseEntity<List<alertModel>> searchAlert(@RequestBody() String var, ModelMap model)
     {
+        System.out.println("here: "+(var));
+        List<alertModel> data;
     	if(var.equals("TCP") | var.equals("UDP") | var.equals("ICMP")) {
-    		List<alertModel> data = repos.findByProtocol(var);
+    		 data = repos.findByProtocol(var);
     		//System.out.println(data);
     		model.put("data", data);
+            System.out.println("from func: "+data);
+            return new ResponseEntity<>(data, HttpStatus.OK);
     	}
     	else if (var.matches("[a-zA-Z]+")) {
-    		List<alertModel> data = repos.findByMsg(var);
+    		data = repos.findByMsg(var);
     		//System.out.println(data);
     		model.put("data", data);
+            return new ResponseEntity<>(data, HttpStatus.OK);
     	}
     	else if(var.length()>=6 & isNumeric(var))
     	{
-    		List<alertModel> data = repos.findByRid(var);
+    		data = repos.findByRid(var);
     		model.put("data", data);
+            return new ResponseEntity<>(data, HttpStatus.OK);
     	}
     	else if(isNumeric(var))
     	{
-    		List<alertModel> data = repos.findByPriority(var);
+    		data = repos.findByPriority(var);
     		model.put("data", data);
+            return new ResponseEntity<>(data, HttpStatus.OK);
     	}
 
 
-    	return "snortstart.jsp";
+    	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     static String displayInterfaceInformation(NetworkInterface netint) throws SocketException {

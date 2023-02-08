@@ -114,8 +114,8 @@ public class snortStartModel extends UserController {
 
 
         System.out.println("Staring SNORT IN IDS MODE");
-        String inface1 = ""+inface.charAt(4);
-        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface1, "-q", "-c", confFilePath);
+//        String inface1 = ""+inface.charAt(4);
+        ProcessBuilder ps = new ProcessBuilder("snort", "-A", logComp, "-i", inface, "-q", "-c", confFilePath);
         ps.redirectErrorStream(true);
         Process pr = ps.start();
         BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
@@ -146,13 +146,11 @@ public class snortStartModel extends UserController {
                 this.repos.save(obj);
                 count++;
 
-
             } else {
                 System.out.println(line);
             }
         }
         //pr.waitFor();
-
         in.close();
         return null;
     }
