@@ -1,5 +1,6 @@
 package com.snortmanage.springboot.snortmanage.usermanager;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -30,6 +31,11 @@ public class user {
     private String confFilePath;
     @Transient
     private String ruleFilePath;
+
+    public long getId() {
+        return id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -55,6 +61,7 @@ public class user {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -62,10 +69,14 @@ public class user {
     public void setPassword(String password) {
         this.password = hashPassword(password);
     }
+
+    @JsonIgnore
     public String getConfFilePath() { return confFilePath; }
 
+    @JsonIgnore
     public String getRuleFilePath() { return ruleFilePath; }
 
+    @JsonIgnore
     public String getLogFilePath() { return logFilePath; }
 
     public String getOperatingSystem() {

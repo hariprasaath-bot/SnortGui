@@ -1,12 +1,16 @@
 package com.snortmanage.springboot.snortmanage.admin;
 
+import com.snortmanage.springboot.snortmanage.config.rule;
 import com.snortmanage.springboot.snortmanage.fetcher.SnortRuleRepo;
 import com.snortmanage.springboot.snortmanage.usermanager.user;
 import com.snortmanage.springboot.snortmanage.usermanager.UserRegRepo;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,40 +42,48 @@ public class AdminController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/fetchuser")
-    public String userfetch(@RequestParam("search term") String search, ModelMap model) {
+    public ResponseEntity<List<user>> userfetch(@RequestBody() String search, ModelMap model) {
         System.out.println("USER TABLE: Your query is  " + search);
-
+        List<user> users;
         if (search.contains("@.com")) {                  //Search for protocol
-            List<user> users = repo.findByemail(search);
+             users = repo.findByemail(search);
             if (users.isEmpty()) {
                 System.out.println(search + " NO match found");
                 model.put("noRule", "NO match found");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             } else {
                 int noOfUsers = users.size();
                 model.put("rows", noOfUsers);
                 model.put("users", users);
                 String scriptdata = "onerror='tableCreate()'";
                 model.put("functioncall", scriptdata);
+//                System.out.println((users));
+                return new ResponseEntity<>(users,HttpStatus.OK);
             }
         } else if (search.toLowerCase().contains("linux") || search.toLowerCase().contains("windows")) {                             //Search for rule sid
-            List<user> users = repo.findByoperatingSystem(search);
+            users = repo.findByoperatingSystem(search);
             if (users.isEmpty()) {
                 System.out.println(search + " NO match found");
                 model.put("noRule", "NO match found");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             } else {
                 int noOfUsers = users.size();
                 model.put("rows", noOfUsers);
                 model.put("users", users);
                 String scriptdata = "onerror='tableCreate()'";
                 model.put("functioncall", scriptdata);
+//                System.out.println((users));
+                return new ResponseEntity<>(users,HttpStatus.OK);
             }
         }
-        return "adminpage.jsp";
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @CrossOrigin
     @PostMapping("/viewall")
-    public String userdata(ModelMap model) {
+    public ResponseEntity<List<user>>  userdata(ModelMap model) {
 
         List<user> data = new ArrayList<user>();
         repo.findAll().forEach(user -> data.add(user));
@@ -84,7 +96,7 @@ public class AdminController {
             String scriptdata = "onerror='tableCreate()'";
             model.put("functioncall", scriptdata);
         }
-        return "adminpage.jsp";
+        return new ResponseEntity<>(data,HttpStatus.OK);
     }
 
     @PostMapping("/edited")
